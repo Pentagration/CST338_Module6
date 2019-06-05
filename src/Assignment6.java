@@ -337,6 +337,185 @@ class Hand
 }
 //END class Hand
 
+//START class Deck
+//Deck class holds all available cards for distribution to hands.
+class Deck
+{
+   public static final int MAX_CARDS = 6 * 56;
+
+   private static Card[] masterPack = new Card[56];
+   private Card[] cards;
+   private int topCard;
+
+   //START constructors
+   //Default constructor
+   public Deck()
+   {
+      allocateMasterPack();
+      init(1);
+   }
+
+   //Constructor
+   public Deck(int numPacks)
+   {
+      allocateMasterPack();
+      init(numPacks);
+   }
+   
+   //Initializes deck with correct number of instantiated cards.
+   public void init(int numPacks)
+   {
+      cards = new Card[numPacks * 56];
+      for (int i = 0; i < numPacks; i++)
+      {
+         System.arraycopy(masterPack, 0, this.cards, i * masterPack.length,
+            masterPack.length);
+      }
+      if ((numPacks * 56) > MAX_CARDS)
+         topCard = MAX_CARDS - 1;
+      else
+         topCard = (numPacks * 56) - 1;
+   }
+   
+   /*
+   * shuffle method
+   * randomizes indices of existing cards in deck
+   */
+   public void shuffle()
+   {
+      Random shuffle = new Random();
+
+      for (int i=0; i < cards.length; i++)
+      {
+         int randomIndex = i + shuffle.nextInt(cards.length - i);
+         Card swap = cards[randomIndex];
+         cards[randomIndex] = cards[i];
+         cards[i] = swap;
+      }
+   }
+
+   /*
+   * dealCard returns a card while topCard is not negative, otherwise return
+   * null
+   */
+   public Card dealCard()
+   {
+      if (topCard != -1) //since a card is stored at 0, deck is empty at -1
+         return cards[topCard--];
+      return null;
+   }
+
+   //getTopCard returns topCard integer
+   public int getTopCard()
+   {
+      return topCard;
+   }
+   /*
+   * inspectCard return a card with errorFlag = true if k is out of bounds
+   * return card otherwise.
+   */
+   public Card inspectCard(int k)
+   {
+      if (k <= topCard)
+         return cards[k];
+      return new Card('X', Card.Suit.clubs);
+   }
+
+   /*
+   * allocateMasterPack generates proper card values for the pack
+   */
+   private static void allocateMasterPack()
+   {
+      int k = 0; //for deck array number
+
+      if (masterPack[0] != null)
+         return;
+
+      for (int i = 0; i < Card.Suit.values().length; i++)
+      {
+         for (int j = 0; j < Card.cValue.length; j++)
+         {
+            masterPack[k++] = new Card(Card.cValue[j], Card.Suit.values()[i]);
+         }
+      }
+   }
+
+   public boolean addCard(Card card)
+   {
+      //make sure that there are not too many instances of the card in the
+      //deck if you add it.  Return false if there will be too many.  It should
+      //put the card on the top of the deck.
+
+      int count = 0;
+
+      // get number of cards in the deck already
+      for (int i = 0; i < cards.length; i++)
+      {
+         if (cards[i].equals(card))
+         {
+            count++;
+         }
+      }
+
+      // check and see if too many
+      if (count > 0)
+      {
+         return false;
+      }
+      else
+      {
+         this.cards[topCard++] = card;
+         return true;
+      }
+   }
+
+   public boolean removeCard(Card card)
+   {
+      //you are looking to remove a specific card from the deck.  Put the
+      //current top card into its place.  Be sure the card you need is actually
+      //still in the deck, if not return false.
+      
+      int location = -1;
+      
+      // get number of cards in the deck already
+      for (int i = 0; i < cards.length; i++)
+      {
+         if (cards[i].equals(card))
+         {
+            location = i;
+            break;
+         }
+      }
+      
+      if (location > -1)
+      {
+         Card temp = this.dealCard();
+         this.cards[location] = temp;
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   public void sort()
+   {
+      //put all of the cards in the deck back into the right order according to
+      //their values.  Is there another method somewhere that already does this
+      //that you could refer to?
+
+      Card.arraySort(this.cards, this.getNumCards());
+   }
+
+   public int getNumCards()
+   {
+      //return the number of cards remaining in the deck.
+      return (topCard + 1);
+   }
+}
+//END class Deck
+
 //START class CardGameFramework - provided by Instructor--------------------------
 class CardGameFramework
 {

@@ -43,6 +43,168 @@ public class Assignment6
    }
 }
 
+//START class Card
+/* 
+ * The Card class allows for the representation and manipulation of a single
+ * playing card as found in a standard 56 card deck.
+ */
+class Card
+{
+   /*
+    * A public enum Suit stores the values of clubs, diamonds, hearts, spades;
+    * A public static final char cValue[] stores the values of each card 1-9 and
+    * T-A.  Ten is represented by 'T', not '10'.
+    */
+   public enum Suit
+   {
+      clubs, diamonds, hearts, spades;
+   }
+   public static final char cValue[] = {'A', '2', '3', '4', '5', '6', '7', '8',
+         '9', 'T', 'J', 'Q', 'K', 'X'};
+   public static char[] valuRanks = {'A', '2', '3', '4', '5', '6', '7', '8',
+         '9', 'T', 'J', 'Q', 'K', 'X'};
+   private char value;
+   private Suit suit;
+   private boolean errorFlag;
+
+   //START constructors
+   //Default constructor
+   public Card()
+   {
+      this.set('A', Suit.spades);
+   }
+
+   //Constructor
+   public Card(char value, Suit suit)
+   {
+      this.set(value, suit);
+   }
+   //END constructors
+
+   //START mutators
+   public boolean set(char value, Suit suit)
+   {
+      if(isValid(value, suit))
+      {
+         this.value = value;
+         this.suit = suit;
+         this.errorFlag = false;
+      }
+      else
+      {
+         this.errorFlag = true;
+      }
+
+      return this.errorFlag;
+   }
+   //END mutators
+
+   //START accessors
+   public Suit getSuit()
+   {
+      return this.suit;
+   }
+
+   public char getValue()
+   {
+      return this.value;
+   }
+
+   public boolean getErrorFlag()
+   {
+      return this.errorFlag;
+   }
+   //END accessors
+
+   /*
+    * public boolean equals(Card card) returns true if all the fields are
+    * identical and false otherwise.
+    */
+   public boolean equals(Card card)
+   {
+      boolean isEqual = false;
+
+      if (this.getValue() == card.getValue() && this.getSuit() == card.getSuit()
+            && this.getErrorFlag() == card.getErrorFlag())
+      {
+         isEqual = true;
+      }
+      return isEqual;
+   }
+
+   /*
+    * private boolean isValid(char value, Suit suit) returns true if value is a
+    * valid card value and false otherwise.
+    */
+   private boolean isValid(char value, Suit suit)
+   {
+      boolean isValid = false;
+
+      for (char index : cValue)
+      {
+         if (Character.toUpperCase(value) == index)
+         {
+            isValid = true;
+         }
+      }
+      return isValid;
+   }
+
+   /*
+    * toString() concatenates the A thru 2 card value and the card suit into a
+    * single string "value of suit" example: "A of clubs"
+    */
+   public String toString()
+   {
+      if(errorFlag == true)
+      {
+         return "[invalid]";
+      }
+      else
+      {
+         String card = Character.toUpperCase(value) + " of " + suit;
+         return card;
+      }
+    }
+
+   static void arraySort(Card[] cArray, int arraySize)
+   {
+      int tempVal1 = 0;
+      int tempVal2 = 0;
+
+      for (int i = 0; i < arraySize - 1; i++)
+      {
+         for (int j = 0; j < arraySize - i - 1; j++)
+         {
+            for (int x = 0; x < valuRanks.length; x++)
+            {
+               if(valuRanks[x] == cArray[j].getValue())
+               {
+                  tempVal1 = x;
+                  break;
+               }
+            }
+            
+            for (int y = 0; y < valuRanks.length; y++)
+            {
+               if(valuRanks[y] == cArray[j + 1].getValue())
+               {
+                  tempVal2 = y;
+                  break;
+               }
+            }
+               if (tempVal1 > tempVal2)
+               {
+                  Card temp = cArray[j];
+                  cArray[j] = cArray[j+1];
+                  cArray[j+1] = temp;
+               }
+            }
+         }
+   }
+}
+//END class Card
+
 //START class CardGameFramework - provided by Instructor--------------------------
 class CardGameFramework
 {

@@ -43,6 +43,11 @@ public class Assignment6
    }
 }
 
+/*****************************************************************************
+* BELOW THIS LINE IS EXISTING CODE FROM MODULE 5:
+* classes Card, Hand, Deck and CardGameFramework
+*****************************************************************************/
+
 //START class Card
 /* 
  * The Card class allows for the representation and manipulation of a single

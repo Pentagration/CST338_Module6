@@ -205,6 +205,138 @@ class Card
 }
 //END class Card
 
+//START class Hand
+/**
+ * The Hand class represents the cards held by a single player
+ */
+class Hand
+{
+   public static final int MAX_CARDS = 56;
+
+   private Card[] myCards;
+   private int numCards;
+
+   //START constructors
+   //Default constructor
+   public Hand()
+   {
+      this.myCards = new Card[MAX_CARDS];
+      this.numCards = 0;
+   }
+   //END constructors
+  
+   // public void resetHand() resets an existing hand to 0 cards
+   public void resetHand()
+   {
+      this.numCards = 0;
+   }
+
+   /*
+    * public boolean takeCard(Card card) puts a new card in the players hand
+    * and also checks that taking a new card would not violate the MAX_CARDS
+    * allowed in the hand, which is set to MAX_CARDS = 56 by the Hand constructor.
+    */
+   public boolean takeCard(Card card)
+   {
+      boolean newCard = false;
+
+      //checking if hand size plus card drawn will put us over max size
+      if (numCards + 1 <= MAX_CARDS)
+      {
+         myCards[numCards] = new Card(card.getValue(), card.getSuit());
+         this.numCards++;
+         newCard = true;
+      }
+      return newCard;
+   }
+
+   /*
+    * public Card playCard() returns and removes the card in the top occupied
+    * position of the hand array.
+    */
+   public Card playCard(int cardIndex)
+   {
+      if ( numCards == 0 ) //error
+      {
+         //Creates a card that does not work
+         return new Card('M', Card.Suit.spades);
+      }
+      //Decreases numCards.
+      Card card = myCards[cardIndex];
+
+      numCards--;
+      for(int i = cardIndex; i < numCards; i++)
+      {
+         myCards[i] = myCards[i+1];
+      }
+
+      myCards[numCards] = null;
+
+      return card;
+    }
+
+   // toString() concatenates the cards in the hand into a single string.
+   public String toString()
+   {
+      int cardCounter = 0;
+      int handCards = 0;
+      StringBuilder hand = new StringBuilder("Hand = (");
+
+      if (this.numCards > 0)
+      {
+         for (Card card:myCards)
+         {
+            if (card == null)
+            {
+               break;
+            }
+            hand.append(card.toString());
+            if(handCards < this.numCards - 1)
+            {
+               hand.append(", ");
+            }
+            cardCounter++;
+            handCards++;
+
+            //if statement below formats the output onto multiple lines
+            if (cardCounter % 5 == 0 && handCards != this.numCards)
+            {
+               hand.append("\n");
+               cardCounter = 0;
+            }
+         }
+      }
+      hand.append(")\n");
+      return hand.toString();
+   }
+   
+   //Getter getNumCards returns the number of cards currently in the hand
+   public int getNumCards()
+   {
+      return this.numCards;
+   }
+
+   // inspectCard accesses individual card (k).
+   public Card inspectCard(int k)
+   {
+      if (this.myCards[k] != null)
+      {
+         return this.myCards[k];
+      }
+      else
+      {
+         Card tempCard = new Card('z', Card.Suit.clubs);
+         return tempCard;
+      }
+   }
+
+   public void sort()
+   {
+      Card.arraySort(this.myCards, this.numCards);
+   }
+}
+//END class Hand
+
 //START class CardGameFramework - provided by Instructor--------------------------
 class CardGameFramework
 {

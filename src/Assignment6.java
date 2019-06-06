@@ -87,7 +87,7 @@ class GameControl
 
 /*****************************************************************************
 * BELOW THIS LINE IS EXISTING CODE FROM MODULE 5:
-* classes Card, Hand, Deck and CardGameFramework
+* classes Card, Hand, Deck, GUICard and CardGameFramework
 *****************************************************************************/
 
 //START class Card
@@ -562,6 +562,76 @@ class Deck
    }
 }
 //END class Deck
+
+//START class GUICard
+class GUICard
+{
+ //A 2-D array to store cards representation and point values
+ //14 = A thru K + X (X = Joker)
+ //4 = suits
+ private static Icon[][] iconCards = new ImageIcon[14][4];
+ private static Icon iconBack;
+ static boolean iconsLoaded = false;
+
+ //generates image icon array from files
+ static void loadCardIcons()
+ {
+    if (iconsLoaded == true)
+       return;
+    int rows = iconCards.length;
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < rows; i++)
+    {
+       for (Card.Suit s: Card.Suit.values())
+       {
+          sb.append("images/" + Card.cValue[i] + Character.toUpperCase(s.toString().charAt(0)) + ".gif");
+          iconCards[i][s.ordinal()] = new ImageIcon(sb.toString());
+          sb.setLength(0);
+       }
+    }
+    iconBack = new ImageIcon("images/" + "BK.gif");
+    iconsLoaded = true;
+ }
+
+ static public Icon getIcon(Card card)
+ {
+   loadCardIcons(); // should call method above loadCardIcons
+   return iconCards[valueAsInt(card)][suitAsInt(card)];
+ }
+
+ static public Icon getBackCardIcon()
+ {
+   return iconBack;
+ }
+
+ private static int suitAsInt(Card card)
+ {
+   return card.getSuit().ordinal();
+ }
+
+ private static int valueAsInt(Card card)
+ {
+   char cardsValue = card.getValue();
+   for(int k = 0; k < 14; k++)
+   {
+       if(Card.valuRanks[k] == cardsValue)
+          return k;
+    }
+    return 0; //should return an A
+ }
+ static String turnIntIntoCardValue(int k)
+    {
+       return String.valueOf(Card.valuRanks[k]);
+    }
+
+ // turns 0 - 3 into c, d, h .s
+  static String turnIntIntoCardSuit(int j)
+    {
+       return Card.Suit.values()[j].toString();
+    }
+
+}
+//END class GUICard
 
 //START class CardGameFramework - provided by Instructor--------------------------
 class CardGameFramework

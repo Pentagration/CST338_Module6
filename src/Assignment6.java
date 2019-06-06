@@ -46,7 +46,15 @@ public class Assignment6
 //START class ClockTimer
 class ClockTimer extends JLabel
 {
+   public ClockTimer()
+   {
+      
+   }
    
+   public void startTimer()
+   {
+      
+   }
 }
 //END class ClockTimer
 
@@ -77,6 +85,16 @@ class GameModel
 class GameView extends JFrame
 {
    private ClockTimer timer;
+   
+   public GameView()
+   {
+      
+   }
+   
+   public GameView(ClockTimer timer)
+   {
+      this.timer = timer;
+   }
 }
 //END class GameView
 

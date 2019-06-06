@@ -59,7 +59,9 @@ class GameModel
    
    public GameModel()
    {
-      
+      this.highCardGame = null;
+      this.computer = "";
+      this.human = "";
    }
    
    public GameModel(CardGameFramework highCardGame, String computer, String human)
@@ -74,14 +76,27 @@ class GameModel
 //START class GameView
 class GameView extends JFrame
 {
- 
+   private ClockTimer timer;
 }
 //END class GameView
 
 //START class GameControl
 class GameControl
 {
-
+   private GameModel model;
+   private GameView view;
+   
+   public GameControl()
+   {
+      this.model = null;
+      this.view = null;
+   }
+   
+   public GameControl(GameModel model, GameView view)
+   {
+      this.model = model;
+      this.view = view;
+   }
 }
 //END class GameControl
 

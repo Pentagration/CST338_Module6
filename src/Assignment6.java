@@ -43,6 +43,48 @@ public class Assignment6
    }
 }
 
+//START class ClockTimer
+class ClockTimer extends JLabel
+{
+   
+}
+//END class ClockTimer
+
+//START class GameModel
+class GameModel
+{
+   private CardGameFramework highCardGame;
+   private String computer;
+   private String human;
+   
+   public GameModel()
+   {
+      
+   }
+   
+   public GameModel(CardGameFramework highCardGame, String computer, String human)
+   {
+      this.highCardGame = highCardGame;
+      this.computer = computer;
+      this.human = human;
+   }
+}
+//END class GameModel
+
+//START class GameView
+class GameView extends JFrame
+{
+ 
+}
+//END class GameView
+
+//START class GameControl
+class GameControl
+{
+
+}
+//END class GameControl
+
 /*****************************************************************************
 * BELOW THIS LINE IS EXISTING CODE FROM MODULE 5:
 * classes Card, Hand, Deck and CardGameFramework

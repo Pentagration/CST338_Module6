@@ -33,6 +33,7 @@ public class Assignment6
             numUnusedCardsPerPack, unusedCardsPerPack, 
             numOfPlayers, cardsPerHand);
       
+      // actionPerformed()
       ClockTimer timer = new ClockTimer();
       timer.startTimer();
       
@@ -44,8 +45,12 @@ public class Assignment6
 }
 
 //START class ClockTimer
-class ClockTimer extends JLabel
+class ClockTimer extends Thread
 {
+	private int count=0;
+	private boolean pauseStatus=false;
+
+	// Thread.sleep method can throw exception. Try Catch
    public ClockTimer()
    {
       
@@ -53,7 +58,27 @@ class ClockTimer extends JLabel
    
    public void startTimer()
    {
-      
+      this.pauseStatus=!this.pauseStatus;
+   }
+   
+   public void doNothing()
+   {
+	   try {
+		   ClockTimer.sleep(1000);
+	   } catch (InterruptedException e) {
+		   System.out.println(e);
+	   }
+   }
+   
+   public void run() {
+	   // Put all needed timer code in run method
+	   // Pause button -> indefinite pause. 
+	   // Not sure if count should be in run or main!
+	   while (this.pauseStatus) {
+		   count++;
+		   doNothing();
+		   
+	   }
    }
 }
 //END class ClockTimer

@@ -1,5 +1,11 @@
+/Assignment6.class
+/Card$Suit.class
+/Card.class
+/CardGameFramework.class
 /ClockTimer.class
+/Deck.class
+/GUICard.class
 /GameControl.class
 /GameModel.class
 /GameView.class
-/GUICard.class
+/Hand.class

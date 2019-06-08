@@ -103,6 +103,7 @@ class GameView extends JFrame
    
    public GameView(ClockTimer timer)
    {
+      //setup main frame
       super();
       setTitle("Card Table");
       setLayout(new BorderLayout());
@@ -110,18 +111,22 @@ class GameView extends JFrame
      
       this.timer = timer;
       
+      //computer panel
       pnlComputerHand = new JPanel(new GridLayout(1,7));
       pnlComputerHand.setBorder
          (BorderFactory.createTitledBorder("Computer Hand"));
       
+      //play area panel
       pnlPlayArea = new JPanel(new GridLayout(1,2));
       pnlPlayArea.setBorder
          (BorderFactory.createTitledBorder("Playing Area"));
       
+      //human area panel
       pnlHumanHand = new JPanel(new GridLayout(1,7));
       pnlHumanHand.setBorder
          (BorderFactory.createTitledBorder("Your Hand"));
       
+      //side panel for timer and buttons
       pnlTimer = new JPanel();
       pnlTimer.add(this.timer);
       timerButton = new JButton("Start/Stop Timer");
@@ -129,6 +134,7 @@ class GameView extends JFrame
       quit = new JButton("Quit");
       cannotPlay = new JButton("Can't Play");
       
+      //control panel
       pnlControls = new JPanel(new GridLayout(3,1));
       pnlControls.setBorder
          (BorderFactory.createTitledBorder("Time"));
@@ -136,7 +142,8 @@ class GameView extends JFrame
       pnlControls.add(timerButton);
       pnlControls.add(quit);
       
-      this.setSize(800,800);
+      //add all the major panels to the JFrame
+      this.setSize(1200,800);
       this.add(pnlControls, BorderLayout.EAST);
       this.add(pnlComputerHand, BorderLayout.NORTH);
       this.add(pnlPlayArea, BorderLayout.CENTER);
@@ -149,6 +156,28 @@ class GameView extends JFrame
    {
       return timer;
    }
+   
+   //listeners for quit, cannot play and timer start/stop
+   public void quitActionListener(ActionListener l)
+   {
+      quit.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      quit.addActionListener(l);
+   }
+   
+   public void cannotPlayListener(ActionListener l)
+   {
+      cannotPlay.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      cannotPlay.addActionListener(l);
+   }
+   
+   public void timerButtonListener(ActionListener l)
+   {
+      timerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      timerButton.addActionListener(l);
+   }
+   
+   //deal cards
+
 }
 //END class GameView
 

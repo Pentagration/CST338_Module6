@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.*;
 import java.util.*;
 import java.text.*;
@@ -34,7 +35,7 @@ public class Assignment6
             numOfPlayers, cardsPerHand);
       
       ClockTimer timer = new ClockTimer();
-      timer.startTimer();
+      //timer.startTimer();
       
       GameModel model = new GameModel(highCardGame, "Computer", "Player");
       GameView view = new GameView(timer);
@@ -44,16 +45,98 @@ public class Assignment6
 }
 
 //START class ClockTimer
-class ClockTimer extends JLabel
+class ClockTimer extends JFrame
 {
-   public ClockTimer()
+   private int time = 0;
+   private boolean timerOn = false; // used for run method
+   private final int PAUSE = 100; // milliseconds
+   private String start = "START";
+   private String stop = "STOP";
+
+   public Timer clock;
+   public JButton timerButton;
+   public JLabel timerText;
+
+   public ClockTimer() 
    {
-      
+      // 1000 milliseconds = 1 second timer interval
+      clock = new Timer(1000, timerEvent);
+
+      timerText = new JLabel("" + formatTime(time));
+      timerButton = new JButton(start);
+      timerButton.addActionListener(buttonEvent);
+
+      setSize(200, 200); // this can change, just used 200x200 as a placeholder
+      setTitle("Timer"); // probably don't need this, following format from slides
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    }
    
-   public void startTimer()
+   // format time for display
+   public String formatTime(long timeElapsed) 
    {
-      
+      long sec = timeElapsed / 1000; // time is measured in milliseconds
+      long min = sec / 60; // rounds because int division
+      sec = sec % 60; // gets the remainder for seconds
+      return String.format("%02d:%02d", min, sec);
+   }
+   
+   // needed for Timer class instantiation, makes timer count
+   private ActionListener timerEvent = new ActionListener() 
+   {
+      public void actionPerformed(ActionEvent e) 
+      {
+         time++;
+         timerText.setText("" + formatTime(time));
+      }
+   };
+
+   // creates timer and starts (also starts thread), similar to lecture slides
+   private ActionListener buttonEvent = new ActionListener() 
+   {
+      public void actionPerformed(ActionEvent e) 
+      {
+         TimerClass gameTimer = new TimerClass();
+         gameTimer.start();
+      }
+   };
+
+   // for threading
+   private class TimerClass extends Thread 
+   {
+      // Override run method
+      public void run() 
+      {
+         if (timerOn == true) 
+         {
+            timerButton.setText(start);
+            clock.stop();
+            timerOn = false;
+            timerText.setText("" + formatTime(time));
+         } 
+         else if (timerOn == false) 
+         {
+            timerButton.setText(stop);
+            clock.start();
+            time = 0;
+            timerOn = true;
+            timerText.setText("" + formatTime(time));
+         }
+         doNothing(PAUSE);
+      }
+
+      // same as lecture slides
+      public void doNothing(int milliseconds) 
+      {
+         try 
+         {
+            Thread.sleep(milliseconds);
+         } 
+         catch (InterruptedException e) 
+         {
+            System.out.println("Unexpected interrupt");
+            System.exit(0);
+         }
+      }
    }
 }
 //END class ClockTimer

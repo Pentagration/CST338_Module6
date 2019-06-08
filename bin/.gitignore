@@ -3,3 +3,14 @@
 /GameModel.class
 /GameView.class
 /GUICard.class
+/GameControl$Card$Suit.class
+/GameControl$Card.class
+/GameControl$CardGameFramework.class
+/GameControl$Deck.class
+/GameControl$GUICard.class
+/GameControl$Hand.class
+/Card$Suit.class
+/Card.class
+/CardGameFramework.class
+/Deck.class
+/Hand.class

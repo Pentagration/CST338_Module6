@@ -130,6 +130,7 @@ class GameControl
    public Card checkCard(int player, int index)
    {
 	   return highCardGame.getHand(player).inspectCard(index);
+   }
 }
 //END class GameControl
 

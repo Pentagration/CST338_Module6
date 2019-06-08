@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.*;
 import java.util.*;
 import java.text.*;
@@ -45,40 +46,76 @@ public class Assignment6
 }
 
 //START class ClockTimer
-class ClockTimer extends Thread
+class ClockTimer
 {
 	int count=0;
-	boolean pauseStatus=false;
+	boolean pauseStatus=false; // would we want this to be true as default?
+	public Timer clock;
+   public JButton timerButton;
 
    public ClockTimer()
    {
-      
+      // 1000 milliseconds = 1 second timer interval
+      clock = new Timer(1000, timerEvent);
+
+      timerButton = new JButton();
+      timerButton.addActionListener(buttonEvent);
    }
    
-   public void startTimer()
+   public void startTimer() // toggle timer?  This would work for both right?
    {
       this.pauseStatus=!this.pauseStatus;
    }
    
-   public void doNothing()
-   {
-	   try {
-		   ClockTimer.sleep(1000);
-	   } catch (InterruptedException e) {
-		   System.out.println(e);
-	   }
-   }
    public int getCount( ) {
 	   return this.count;
    }
    
-   public void run() {
-	   // Put all needed timer code in run method
-	   // Not sure if count should be in run or main!
-	   while (this.pauseStatus) {
-		   count++;
-		   doNothing();  
-	   }
+   // needed for Timer class instantiation, makes timer count
+   private ActionListener timerEvent = new ActionListener() 
+   {
+      public void actionPerformed(ActionEvent e) 
+      {
+         TimerClass gameTimer = new TimerClass();
+         gameTimer.start();
+      }
+   };
+
+   // button press triggers pauseStatus swap (I think?)
+   private ActionListener buttonEvent = new ActionListener() 
+   {
+      public void actionPerformed(ActionEvent e) 
+      {
+         startTimer();
+      }
+   };
+   
+   // for threading
+   private class TimerClass extends Thread 
+   {
+   
+      public void run() 
+      {
+         // Put all needed timer code in run method
+         // Not sure if count should be in run or main!
+         while (pauseStatus) 
+         {
+            count++;
+            doNothing();  
+         }
+      }
+      
+      public void doNothing()
+      {
+         try 
+         {
+            Thread.sleep(1000);
+         } 
+         catch (InterruptedException e) 
+         {
+            System.out.println(e);
+         }
+      }
    }
 }
 //END class ClockTimer

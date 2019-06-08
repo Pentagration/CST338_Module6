@@ -106,8 +106,8 @@ class GameControl
    
    public GameControl()
    {
-      this.model = null;
-      this.view = null;
+      model = new GameModel();
+      view = new GameView();
    }
    
    public GameControl(GameModel model, GameView view)
@@ -115,6 +115,21 @@ class GameControl
       this.model = model;
       this.view = view;
    }
+   /*
+    * If player/computer cannot play, increments the count.
+   */
+   public void setCannotPlayCount()
+   {
+	   if (view.getResponse() == true)
+		   model.incrCannotPlay();
+   }
+   /*
+    * returns Card player wants to play.
+    * Model can prevent illegal plays.
+    * */
+   public Card checkCard(int player, int index)
+   {
+	   return highCardGame.getHand(player).inspectCard(index);
 }
 //END class GameControl
 

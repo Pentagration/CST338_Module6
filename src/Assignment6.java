@@ -86,14 +86,68 @@ class GameView extends JFrame
 {
    private ClockTimer timer;
    
-   public GameView()
-   {
-      
-   }
+   //main GUI panels
+   private JPanel 
+      pnlComputerHand,  //computer cards
+      pnlHumanHand,     //human/player cards
+      pnlPlayArea,      //two play decks
+      pnlControls,      //stop time and end game
+      pnlTimer,         //timer area
+      pnlOutput;        //game messages
+   
+   //GUI buttons
+   private JButton
+      timerButton,      //start/stop the timer
+      quit,             //quit the game
+      cannotPlay;       //when no card can be played
    
    public GameView(ClockTimer timer)
    {
+      super();
+      setTitle("Card Table");
+      setLayout(new BorderLayout());
+      setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+     
       this.timer = timer;
+      
+      pnlComputerHand = new JPanel(new GridLayout(1,7));
+      pnlComputerHand.setBorder
+         (BorderFactory.createTitledBorder("Computer Hand"));
+      
+      pnlPlayArea = new JPanel(new GridLayout(1,2));
+      pnlPlayArea.setBorder
+         (BorderFactory.createTitledBorder("Playing Area"));
+      
+      pnlHumanHand = new JPanel(new GridLayout(1,7));
+      pnlHumanHand.setBorder
+         (BorderFactory.createTitledBorder("Your Hand"));
+      
+      pnlTimer = new JPanel();
+      pnlTimer.add(this.timer);
+      timerButton = new JButton("Start/Stop Timer");
+      
+      quit = new JButton("Quit");
+      cannotPlay = new JButton("Can't Play");
+      
+      pnlControls = new JPanel(new GridLayout(3,1));
+      pnlControls.setBorder
+         (BorderFactory.createTitledBorder("Time"));
+      pnlControls.add(pnlTimer);
+      pnlControls.add(timerButton);
+      pnlControls.add(quit);
+      
+      this.setSize(800,800);
+      this.add(pnlControls, BorderLayout.EAST);
+      this.add(pnlComputerHand, BorderLayout.NORTH);
+      this.add(pnlPlayArea, BorderLayout.CENTER);
+      this.add(pnlHumanHand, BorderLayout.SOUTH);
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.setVisible(true);
+   }
+   
+   public ClockTimer getTimer()
+   {
+      return timer;
    }
 }
 //END class GameView

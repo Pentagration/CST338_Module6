@@ -72,7 +72,20 @@ class ClockTimer
    }
    
    // needed for Timer class instantiation, makes timer count
+   // the Timer does this every 1000 milliseconds
    private ActionListener timerEvent = new ActionListener() 
+   {
+      public void actionPerformed(ActionEvent e) 
+      {
+         while (!pauseStatus)
+            {
+            count++;
+            }
+      }
+   };
+
+   // creates Timer and starts it
+   private ActionListener buttonEvent = new ActionListener() 
    {
       public void actionPerformed(ActionEvent e) 
       {
@@ -80,29 +93,16 @@ class ClockTimer
          gameTimer.start();
       }
    };
-
-   // button press triggers pauseStatus swap (I think?)
-   private ActionListener buttonEvent = new ActionListener() 
-   {
-      public void actionPerformed(ActionEvent e) 
-      {
-         startTimer();
-      }
-   };
    
    // for threading
    private class TimerClass extends Thread 
    {
-   
       public void run() 
       {
-         // Put all needed timer code in run method
-         // Not sure if count should be in run or main!
-         while (pauseStatus) 
-         {
-            count++;
-            doNothing();  
-         }
+         // called by action listener
+         // swaps pause status
+         startTimer();
+         doNothing();
       }
       
       public void doNothing()

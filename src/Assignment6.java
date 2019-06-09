@@ -147,7 +147,7 @@ class GameView extends JFrame
       pnlMessages.add(cannotPlay);
       pnlMessages.add(quit);
       pnlMessages.setBorder
-         (BorderFactory.createTitledBorder("Messages"));
+         (BorderFactory.createTitledBorder("Game Panel"));
       
       //add all the major panels to the JFrame
       this.setSize(1200,800);

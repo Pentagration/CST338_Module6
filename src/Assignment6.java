@@ -219,7 +219,8 @@ class GameView extends JFrame
 
       //computer panel
       this.pnlComputerHand = new JPanel(new GridLayout(1,7));
-      this.pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
+      this.pnlComputerHand.setBorder
+         (BorderFactory.createTitledBorder("Computer Hand"));
 
       //play area panel
       this.pnlPlayArea = new JPanel(new GridLayout(1,2));
@@ -357,8 +358,6 @@ class GameView extends JFrame
       }
       
    }
-   
-
 }
 //END class GameView
 

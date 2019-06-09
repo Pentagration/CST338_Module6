@@ -38,8 +38,9 @@ public class Assignment6
       
       GameModel model = new GameModel(highCardGame, "Computer", "Player");
       GameView view = new GameView(timer);
-      
       GameControl game = new GameControl(model, view);
+      
+      view.newMessage("THIS IS THE NEW MESSAGE I WANT");
    }
 }
 
@@ -199,15 +200,18 @@ class GameView extends JFrame
    cannotPlay;       //when no card can be played
    
    //games messages
-   public JLabel message;
-   public String messageText = "DEFAULT MESSAGE";
-   
+   //public JLabel message;
+   //public String messageText = "DEFAULT MESSAGE";
+   public JTextArea message;
+ 
+   /*
    //Cards
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS];
    static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
-   
+   */
+   //constructor
    public GameView(ClockTimer timer)
    {
       //setup main frame
@@ -251,13 +255,15 @@ class GameView extends JFrame
       pnlGame = new JPanel(new GridBagLayout());
       pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
       
-      JLabel message = new JLabel(messageText);
+      JTextArea message = new JTextArea(
+            "This is a really long Default Message that should require multiple lines");
+      message.setEditable(false);
+      message.setLineWrap(true);
+      message.setWrapStyleWord(true);
       message.setPreferredSize(new Dimension(300,400));
       gbc.gridx = 0;
       gbc.gridy = 0;
       pnlGame.add(message, gbc);
-      //THIS WORKS message.setText("Test");
-      message.setText("TEST 4");
       
       quit = new JButton("Quit");
       quit.setPreferredSize(new Dimension(300,50));
@@ -280,10 +286,13 @@ class GameView extends JFrame
       this.add(pnlHumanHand, BorderLayout.SOUTH);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
-      //THIS WORKS message.setText("TEST2"); 
    }
    
-
+   public void newMessage(String newMessage)
+   {
+      message.setText(newMessage);
+   }
+   
    //listeners for quit, cannot play and timer start/stop
    public void quitActionListener(ActionListener l)
    {
@@ -303,6 +312,7 @@ class GameView extends JFrame
       timerButton.addActionListener(l);
    }
 
+   
 
 }
 //END class GameView

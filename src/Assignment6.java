@@ -93,7 +93,7 @@ class GameView extends JFrame
       pnlPlayArea,      //two play decks
       pnlControls,      //stop time and end game
       pnlTimer,         //timer area
-      pnlOutput;        //game messages
+      pnlMessages;      //game messages
    
    //GUI buttons
    private JButton
@@ -135,12 +135,19 @@ class GameView extends JFrame
       cannotPlay = new JButton("Can't Play");
       
       //control panel
-      pnlControls = new JPanel(new GridLayout(3,1));
+      pnlControls = new JPanel();
       pnlControls.setBorder
          (BorderFactory.createTitledBorder("Time"));
       pnlControls.add(pnlTimer);
       pnlControls.add(timerButton);
-      pnlControls.add(quit);
+      //pnlControls.add(quit);
+      
+      //message panel
+      pnlMessages = new JPanel();
+      pnlMessages.add(cannotPlay);
+      pnlMessages.add(quit);
+      pnlMessages.setBorder
+         (BorderFactory.createTitledBorder("Messages"));
       
       //add all the major panels to the JFrame
       this.setSize(1200,800);
@@ -148,6 +155,7 @@ class GameView extends JFrame
       this.add(pnlComputerHand, BorderLayout.NORTH);
       this.add(pnlPlayArea, BorderLayout.CENTER);
       this.add(pnlHumanHand, BorderLayout.SOUTH);
+      this.add(pnlMessages, BorderLayout.WEST);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
    }
@@ -176,7 +184,6 @@ class GameView extends JFrame
       timerButton.addActionListener(l);
    }
    
-   //deal cards
 
 }
 //END class GameView

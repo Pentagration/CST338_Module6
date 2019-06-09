@@ -19,6 +19,8 @@ public class Assignment6
    static int NUM_PLAYERS = 2;
    static int NUM_CARDS_PER_HAND = 7;
    
+   static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
+   
    public static void main(String[] args)
    {
       int numPacksPerDeck = 1;
@@ -39,6 +41,14 @@ public class Assignment6
       GameModel model = new GameModel(highCardGame, "Computer", "Player");
       GameView view = new GameView(timer);
       GameControl game = new GameControl(model, view);
+         
+
+      highCardGame.deal();
+      computerLabels[0] = new JLabel(GUICard.getBackCardIcon());
+      view.pnlComputerHand.add(computerLabels[0]);
+      
+      
+      
    }
 }
 
@@ -175,6 +185,8 @@ class GameModel
 //START class GameView
 class GameView extends JFrame
 {
+   private static final long serialVersionUID = 1L;
+
    private ClockTimer timer;
    
    static final int MAX_CARDS_PER_HAND = 56;
@@ -218,17 +230,20 @@ class GameView extends JFrame
       this.timer = timer;
 
       //computer panel
-      this.pnlComputerHand = new JPanel(new GridLayout(1,7));
+      this.pnlComputerHand = new JPanel();
       this.pnlComputerHand.setBorder
          (BorderFactory.createTitledBorder("Computer Hand"));
+      this.pnlComputerHand.setLayout(new GridLayout(1, NUM_CARDS_PER_HAND));
 
       //play area panel
-      this.pnlPlayArea = new JPanel(new GridLayout(1,2));
+      this.pnlPlayArea = new JPanel();
       this.pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
+      this.pnlPlayArea.setLayout(new GridLayout(1,2));
  
       //human area panel
-      this.pnlHumanHand = new JPanel(new GridLayout(1,7));
+      this.pnlHumanHand = new JPanel();
       this.pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
+      this.pnlHumanHand.setLayout(new GridLayout(1, NUM_CARDS_PER_HAND));
 
       //time panel
       GridBagConstraints gbc = new GridBagConstraints();
@@ -336,27 +351,6 @@ class GameView extends JFrame
    public ClockTimer getTimer()
    {
       return timer;
-   }
-   
-   private void addComputerHand(Hand hand)
-   {
-      for (int k = 0; k < NUM_CARDS_PER_HAND; k++)
-      {
-         this.pnlComputerHand.add(new JLabel(GUICard.getBackCardIcon()));
-      }
-   }
-   
-   private void addCpuHand(Hand hand, int maxHandSize)
-   {  
-      
-      for(int k = 0; k < maxHandSize; k++)
-      {
-         if(k > hand.getNumCards() - 1)
-            this.pnlComputerHand.add(new JLabel(GUICard.getBackCardIcon()));
-         else
-            this.pnlComputerHand.add(new JLabel(GUICard.getBackCardIcon()));
-      }
-      
    }
 }
 //END class GameView

@@ -10,6 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.*;
+
+import com.sun.media.sound.ModelAbstractChannelMixer;
+
+import jdk.internal.module.IllegalAccessLogger.Mode;
+
 import java.util.*;
 import java.text.*;
 
@@ -18,8 +23,6 @@ public class Assignment6
    static int MAX_CARDS_PER_HAND = 56;
    static int NUM_PLAYERS = 2;
    static int NUM_CARDS_PER_HAND = 7;
-   
-   static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    
    public static void main(String[] args)
    {
@@ -34,21 +37,15 @@ public class Assignment6
             numPacksPerDeck, numJokersPerPack,  
             numUnusedCardsPerPack, unusedCardsPerPack, 
             numOfPlayers, cardsPerHand);
-      
+   
       ClockTimer timer = new ClockTimer();
       timer.startTimer();
       
       GameModel model = new GameModel(highCardGame, "Computer", "Player");
       GameView view = new GameView(timer);
+      
       GameControl game = new GameControl(model, view);
-         
-
-      highCardGame.deal();
-      computerLabels[0] = new JLabel(GUICard.getBackCardIcon());
-      view.pnlComputerHand.add(computerLabels[0]);
-      
-      
-      
+      game.setGame();
    }
 }
 
@@ -81,6 +78,8 @@ class GameModel
    private int humanScore = 0;
    private boolean computerCantPlay = false;
    private boolean humanCantPlay = false;
+   JLabel[] computerLabels = new JLabel[GameView.NUM_CARDS_PER_HAND];
+   JButton[] humanLabels = new JButton[GameView.NUM_CARDS_PER_HAND];
    
    public GameModel()
    {
@@ -179,14 +178,28 @@ class GameModel
          System.out.println("Bad player number");
       }
    }
+   
+   public void setTable(JPanel cpu, JPanel player)
+   {
+      for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
+      {
+         computerLabels[k] = new JLabel(GUICard.getBackCardIcon());
+         humanLabels[k] = new JButton(GUICard.getIcon(highCardGame.getHand(1)
+               .inspectCard(k)));
+      }
+    //Add cards aka labels to panels 
+      for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
+      {
+         cpu.add(computerLabels[k]);
+         player.add(humanLabels[k]);
+      }
+   }
 }
 //END class GameModel
 
 //START class GameView
-class GameView extends JFrame
+class GameView extends JFrame implements ActionListener
 {
-   private static final long serialVersionUID = 1L;
-
    private ClockTimer timer;
    
    static final int MAX_CARDS_PER_HAND = 56;
@@ -209,16 +222,17 @@ class GameView extends JFrame
    quit,             //quit the game
    cannotPlay;       //when no card can be played
    
+   public boolean cantPlayPress;
+   
    //games messages
    public JTextArea message;
- 
+   
    //Cards
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS];
    static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
    
-   //constructor
    public GameView(ClockTimer timer)
    {
       //setup main frame
@@ -228,22 +242,19 @@ class GameView extends JFrame
       setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
       this.timer = timer;
+      this.cantPlayPress = false;
 
       //computer panel
-      this.pnlComputerHand = new JPanel();
-      this.pnlComputerHand.setBorder
-         (BorderFactory.createTitledBorder("Computer Hand"));
-      this.pnlComputerHand.setLayout(new GridLayout(1, NUM_CARDS_PER_HAND));
+      this.pnlComputerHand = new JPanel(new GridLayout(1,7));
+      this.pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
 
       //play area panel
-      this.pnlPlayArea = new JPanel();
+      this.pnlPlayArea = new JPanel(new GridLayout(1,2));
       this.pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
-      this.pnlPlayArea.setLayout(new GridLayout(1,2));
- 
+
       //human area panel
-      this.pnlHumanHand = new JPanel();
+      this.pnlHumanHand = new JPanel(new GridLayout(1,7));
       this.pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
-      this.pnlHumanHand.setLayout(new GridLayout(1, NUM_CARDS_PER_HAND));
 
       //time panel
       GridBagConstraints gbc = new GridBagConstraints();
@@ -273,7 +284,7 @@ class GameView extends JFrame
             + "out of cards. The player with the fewest number of Can't Play"
             + " clicks is the winner! \n\n\n" 
             + "Round = " + "0"
-            + "\n\nCards Remaining = " + "var2"
+            + "\n\nCards Remaining = " + "42"
             + "\n\nComputer Can't Play count = " + "0"
             + "\n\nPlayer Can't Play count = " + "0");
       this.message.setEditable(false);
@@ -286,12 +297,14 @@ class GameView extends JFrame
       
       this.quit = new JButton("Quit");
       this.quit.setPreferredSize(new Dimension(300,50));
+      this.quit.addActionListener(this);
       gbc.gridx = 0;
       gbc.gridy = 1;
       this.pnlGame.add(quit, gbc);
       
       this.cannotPlay = new JButton("Can't Play");
       this.cannotPlay.setPreferredSize(new Dimension(300,50));
+      this.cannotPlay.addActionListener(this);
       gbc.gridx = 0;
       gbc.gridy = 2;
       this.pnlGame.add(cannotPlay, gbc);
@@ -304,20 +317,35 @@ class GameView extends JFrame
       this.add(pnlPlayArea, BorderLayout.CENTER);
       this.add(pnlHumanHand, BorderLayout.SOUTH);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.setVisible(true);
+      this.setVisible(true); 
    }
-      
+   
+   public void setVisible()
+   {
+      setVisible(true);
+   }
+   
+   public void actionPerformed(ActionEvent ev)
+   {
+      if (ev.getActionCommand().equalsIgnoreCase("Quit"))
+         quitActionListener();
+      else if (ev.getActionCommand().equalsIgnoreCase("Can't Play"))
+         cannotPlayListener();
+   }
+   
+   public boolean getCantPlayPress()
+   {
+      return cantPlayPress;
+   }
    //listeners for quit, cannot play and timer start/stop
-   public void quitActionListener(ActionListener l)
+   public void quitActionListener()
    {
-      quit.setCursor(new Cursor(Cursor.HAND_CURSOR));
-      quit.addActionListener(l);
+      System.exit(0);
    }
-
-   public void cannotPlayListener(ActionListener l)
+//will be updated to false when player clicks card in hand
+   public void cannotPlayListener()
    {
-      cannotPlay.setCursor(new Cursor(Cursor.HAND_CURSOR));
-      cannotPlay.addActionListener(l);
+      cantPlayPress = true;
    }
 
    public void timerButtonListener(ActionListener l)
@@ -326,7 +354,7 @@ class GameView extends JFrame
       timerButton.addActionListener(l);
    }
    
-   //update the message
+ //update the message
    public void newMessage (String newMessage)
    {
       this.message.setText(newMessage);
@@ -347,11 +375,8 @@ class GameView extends JFrame
             + "\n\nComputer Can't Play count = " + compCannotCount
             + "\n\nPlayer Can't Play count = " + playCannotCount);
    }
-   
-   public ClockTimer getTimer()
-   {
-      return timer;
-   }
+
+
 }
 //END class GameView
 
@@ -364,7 +389,7 @@ class GameControl
    public GameControl()
    {
       model = new GameModel();
-      view = new GameView();
+      view = new GameView(new ClockTimer());
    }
    
    public GameControl(GameModel model, GameView view)
@@ -374,19 +399,27 @@ class GameControl
    }
    /*
     * If player/computer cannot play, increments the count.
+    * calls models cantPlay() method.
    */
-   public void setCannotPlayCount()
+   public void setCannotPlayCount(int i)
    {
-	   if (view.getResponse() == true)
-		   model.incrCannotPlay();
+       model.cantPlay(i);                   
    }
+   
+   public void setGame()
+   {
+      model.dealCards();
+      model.setTable(view.pnlComputerHand,view.pnlHumanHand);
+      view.setVisible();
+   }
+   
    /*
     * returns Card player wants to play.
     * Model can prevent illegal plays.
     * */
    public Card checkCard(int player, int index)
    {
-	   return highCardGame.getHand(player).inspectCard(index);
+       return highCardGame.getHand(player).inspectCard(index);
    }
 }
 //END class GameControl

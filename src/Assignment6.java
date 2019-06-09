@@ -84,8 +84,7 @@ class GameModel
       this.computer = computer;
       this.human = human;
    }
-   
-<<<<<<< HEAD
+
    // deal cards
    public void dealCards()
    {
@@ -141,8 +140,6 @@ class GameModel
          System.out.println("Bad player number");
       }
    }
-=======
->>>>>>> 111ac0b49ad02c6e9e1aa02ff50b223e64c5e48e
 }
 //END class GameModel
 

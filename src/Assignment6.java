@@ -91,17 +91,20 @@ class GameView extends JFrame
    private JPanel 
    pnlComputerHand,  //computer cards
    pnlHumanHand,     //human/player cards
-   pnlPlayArea,      //two play decks
-   pnlControls,      //stop time and end game
-   pnlTimer,         //timer area
-   pnlGame;          //game messages
+   pnlPlayArea,      //two piles of cards
+   pnlTime,          //timer and start/stop time button
+   pnlGame;          //game messages, cannot play, and quit
 
    //GUI buttons
    private JButton
    timerButton,      //start/stop the timer
    quit,             //quit the game
    cannotPlay;       //when no card can be played
-
+   
+   //games messages
+   private JLabel message;
+   public String messageText = "DEFAULT MESSAGE";
+   
    public GameView(ClockTimer timer)
    {
       //setup main frame
@@ -114,49 +117,63 @@ class GameView extends JFrame
 
       //computer panel
       pnlComputerHand = new JPanel(new GridLayout(1,7));
-      pnlComputerHand.setBorder
-      (BorderFactory.createTitledBorder("Computer Hand"));
+      pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
 
       //play area panel
       pnlPlayArea = new JPanel(new GridLayout(1,2));
-      pnlPlayArea.setBorder
-      (BorderFactory.createTitledBorder("Playing Area"));
+      pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
 
       //human area panel
       pnlHumanHand = new JPanel(new GridLayout(1,7));
-      pnlHumanHand.setBorder
-      (BorderFactory.createTitledBorder("Your Hand"));
+      pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
 
-      //side panel for timer and buttons
-      pnlTimer = new JPanel();
-      pnlTimer.add(this.timer);
+      //time panel
+      GridBagConstraints gbc = new GridBagConstraints();
+      
+      pnlTime = new JPanel(new GridBagLayout());
+      pnlTime.setBorder(BorderFactory.createTitledBorder("Time"));
+      
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      pnlTime.add(this.timer, gbc);
+      
       timerButton = new JButton("Start/Stop Timer");
-
-      quit = new JButton("Quit");
-      cannotPlay = new JButton("Can't Play");
-
-      //control panel
-      pnlControls = new JPanel();
-      pnlControls.setBorder
-      (BorderFactory.createTitledBorder("Time"));
-      pnlControls.add(pnlTimer);
-      pnlControls.add(timerButton);
-      //pnlControls.add(quit);
+      timerButton.setPreferredSize(new Dimension(300,50));
+      gbc.gridx = 0;
+      gbc.gridy = 1;
+      pnlTime.add(timerButton);
 
       //game panel
-      pnlGame = new JPanel();
-      pnlGame.add(cannotPlay);
-      pnlGame.add(quit);
-      pnlGame.setBorder
-      (BorderFactory.createTitledBorder("Game Panel"));
+      pnlGame = new JPanel(new GridBagLayout());
+      pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
+      
+      JLabel message = new JLabel(messageText);
+      message.setPreferredSize(new Dimension(300,400));
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      pnlGame.add(message, gbc);
+      
+      quit = new JButton("Quit");
+      quit.setPreferredSize(new Dimension(300,50));
+      gbc.gridx = 0;
+      gbc.gridy = 1;
+      pnlGame.add(quit, gbc);
+      
+      cannotPlay = new JButton("Can't Play");
+      cannotPlay.setPreferredSize(new Dimension(300,50));
+      gbc.gridx = 0;
+      gbc.gridy = 2;
+      pnlGame.add(cannotPlay, gbc);
+      
+
 
       //add all the major panels to the JFrame
       this.setSize(1200,800);
-      this.add(pnlControls, BorderLayout.EAST);
+      this.add(pnlGame, BorderLayout.WEST);
+      this.add(pnlTime, BorderLayout.EAST);
       this.add(pnlComputerHand, BorderLayout.NORTH);
       this.add(pnlPlayArea, BorderLayout.CENTER);
       this.add(pnlHumanHand, BorderLayout.SOUTH);
-      this.add(pnlGame, BorderLayout.WEST);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
    }
@@ -185,8 +202,6 @@ class GameView extends JFrame
       timerButton.addActionListener(l);
    }
 
-   //add hands to view
-   //send messages ("welcom to the game") to the pnlGame
 
 }
 //END class GameView

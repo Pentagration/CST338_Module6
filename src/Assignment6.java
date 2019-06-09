@@ -78,6 +78,7 @@ class GameModel
       this.computer = computer;
       this.human = human;
    }
+   
 }
 //END class GameModel
 
@@ -85,22 +86,22 @@ class GameModel
 class GameView extends JFrame
 {
    private ClockTimer timer;
-   
+
    //main GUI panels
    private JPanel 
-      pnlComputerHand,  //computer cards
-      pnlHumanHand,     //human/player cards
-      pnlPlayArea,      //two play decks
-      pnlControls,      //stop time and end game
-      pnlTimer,         //timer area
-      pnlMessages;      //game messages
-   
+   pnlComputerHand,  //computer cards
+   pnlHumanHand,     //human/player cards
+   pnlPlayArea,      //two play decks
+   pnlControls,      //stop time and end game
+   pnlTimer,         //timer area
+   pnlGame;          //game messages
+
    //GUI buttons
    private JButton
-      timerButton,      //start/stop the timer
-      quit,             //quit the game
-      cannotPlay;       //when no card can be played
-   
+   timerButton,      //start/stop the timer
+   quit,             //quit the game
+   cannotPlay;       //when no card can be played
+
    public GameView(ClockTimer timer)
    {
       //setup main frame
@@ -108,82 +109,84 @@ class GameView extends JFrame
       setTitle("Card Table");
       setLayout(new BorderLayout());
       setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-     
+
       this.timer = timer;
-      
+
       //computer panel
       pnlComputerHand = new JPanel(new GridLayout(1,7));
       pnlComputerHand.setBorder
-         (BorderFactory.createTitledBorder("Computer Hand"));
-      
+      (BorderFactory.createTitledBorder("Computer Hand"));
+
       //play area panel
       pnlPlayArea = new JPanel(new GridLayout(1,2));
       pnlPlayArea.setBorder
-         (BorderFactory.createTitledBorder("Playing Area"));
-      
+      (BorderFactory.createTitledBorder("Playing Area"));
+
       //human area panel
       pnlHumanHand = new JPanel(new GridLayout(1,7));
       pnlHumanHand.setBorder
-         (BorderFactory.createTitledBorder("Your Hand"));
-      
+      (BorderFactory.createTitledBorder("Your Hand"));
+
       //side panel for timer and buttons
       pnlTimer = new JPanel();
       pnlTimer.add(this.timer);
       timerButton = new JButton("Start/Stop Timer");
-      
+
       quit = new JButton("Quit");
       cannotPlay = new JButton("Can't Play");
-      
+
       //control panel
       pnlControls = new JPanel();
       pnlControls.setBorder
-         (BorderFactory.createTitledBorder("Time"));
+      (BorderFactory.createTitledBorder("Time"));
       pnlControls.add(pnlTimer);
       pnlControls.add(timerButton);
       //pnlControls.add(quit);
-      
-      //message panel
-      pnlMessages = new JPanel();
-      pnlMessages.add(cannotPlay);
-      pnlMessages.add(quit);
-      pnlMessages.setBorder
-         (BorderFactory.createTitledBorder("Game Panel"));
-      
+
+      //game panel
+      pnlGame = new JPanel();
+      pnlGame.add(cannotPlay);
+      pnlGame.add(quit);
+      pnlGame.setBorder
+      (BorderFactory.createTitledBorder("Game Panel"));
+
       //add all the major panels to the JFrame
       this.setSize(1200,800);
       this.add(pnlControls, BorderLayout.EAST);
       this.add(pnlComputerHand, BorderLayout.NORTH);
       this.add(pnlPlayArea, BorderLayout.CENTER);
       this.add(pnlHumanHand, BorderLayout.SOUTH);
-      this.add(pnlMessages, BorderLayout.WEST);
+      this.add(pnlGame, BorderLayout.WEST);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
    }
-   
+
    public ClockTimer getTimer()
    {
       return timer;
    }
-   
+
    //listeners for quit, cannot play and timer start/stop
    public void quitActionListener(ActionListener l)
    {
       quit.setCursor(new Cursor(Cursor.HAND_CURSOR));
       quit.addActionListener(l);
    }
-   
+
    public void cannotPlayListener(ActionListener l)
    {
       cannotPlay.setCursor(new Cursor(Cursor.HAND_CURSOR));
       cannotPlay.addActionListener(l);
    }
-   
+
    public void timerButtonListener(ActionListener l)
    {
       timerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
       timerButton.addActionListener(l);
    }
-   
+
+   //add hands to view
+   //send messages ("welcom to the game") to the pnlGame
 
 }
 //END class GameView

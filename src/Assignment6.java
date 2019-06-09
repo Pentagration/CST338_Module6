@@ -250,16 +250,16 @@ class GameView extends JFrame
       this.pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
       
       this.message = new JTextArea("Welcome to the game High-Card. \n\n(1) Play a "
-            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2) "
-            + "You can play a card from your hand that is one higher or one lower "
-            + "than one of the cards in Playing Area. \n\n(3) If you cannot play, "
-            + "click the Can't Play button. \n\nThe game ends when the deck is "
-            + "out of cards. The player with the fewest number of Can't Play clicks"
-            + " is the winner! \n\n\n" 
-            + "Round = " + "<var1>"
-            + "\nCards Remaining = " + "<var2>"
-            + "\n\nComputer Can't Play count = " + "<var3>"
-            + "\n\nPlayer Can't Play count = " + "<var4>");
+            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
+            + " You can play a card from your hand that is one higher or one lower"
+            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
+            + " click the Can't Play button. \n\nThe game ends when the deck is "
+            + "out of cards. The player with the fewest number of Can't Play"
+            + " clicks is the winner! \n\n\n" 
+            + "Round = " + "0"
+            + "\n\nCards Remaining = " + "var2"
+            + "\n\nComputer Can't Play count = " + "0"
+            + "\n\nPlayer Can't Play count = " + "0");
       this.message.setEditable(false);
       this.message.setLineWrap(true);
       this.message.setWrapStyleWord(true);
@@ -314,6 +314,22 @@ class GameView extends JFrame
    public void newMessage (String newMessage)
    {
       this.message.setText(newMessage);
+   }
+   
+   public void updateMessage (int round, int cardsRemaining, int compCannotCount, 
+         int playCannotCount)
+   {
+      this.message.setText("Welcome to the game High-Card. \n\n(1) Play a "
+            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
+            + " You can play a card from your hand that is one higher or one lower"
+            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
+            + " click the Can't Play button. \n\nThe game ends when the deck is "
+            + "out of cards. The player with the fewest number of Can't Play"
+            + " clicks is the winner! \n\n\n" 
+            + "Round = " + round
+            + "\n\nCards Remaining = " + cardsRemaining
+            + "\n\nComputer Can't Play count = " + compCannotCount
+            + "\n\nPlayer Can't Play count = " + playCannotCount);
    }
    
    public ClockTimer getTimer()

@@ -64,6 +64,12 @@ class GameModel
    private CardGameFramework highCardGame;
    private String computer;
    private String human;
+   private int computerNum = 0;
+   private int humanNum = 1;
+   private Card leftCard;
+   private Card rightCard;
+   private int computerCantPlay = 0;
+   private int humanCantPlay = 0;
    
    public GameModel()
    {
@@ -77,6 +83,62 @@ class GameModel
       this.highCardGame = highCardGame;
       this.computer = computer;
       this.human = human;
+   }
+   
+   // deal cards
+   public void dealCards()
+   {
+      this.highCardGame.deal();
+   }
+   
+   // need to play a card
+   public Card playCard(int player, int card)
+   {
+      return this.highCardGame.playCard(player, card);
+   }
+   
+   // need to take a card to replace cards played
+   public boolean takeCard(int player)
+   {
+      return this.highCardGame.takeCard(player);
+   }
+   
+   // setter and getter for each game play area
+   public Card getLeftCard()
+   {
+      return leftCard;
+   }
+   
+   public Card getRightCard()
+   {
+      return rightCard;
+   }
+   
+   public void setLeftCard(Card card)
+   {
+      leftCard = card;
+   }
+   
+   public void setRightCard(Card card)
+   {
+      rightCard = card;
+   }
+   
+   // update can't play
+   public void cantPlay(int player)
+   {
+      if(player == 0)
+      {
+         computerCantPlay++;
+      }
+      else if (player == 1)
+      {
+         humanCantPlay++;
+      }
+      else
+      {
+         System.out.println("Bad player number");
+      }
    }
 }
 //END class GameModel

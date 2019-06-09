@@ -193,7 +193,7 @@ class GameModel
          cpu.add(computerLabels[k]);
          player.add(humanLabels[k]);
       }
-      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck())));
+      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck()))); //add 2 cards to table
       table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck())));
    }
 }

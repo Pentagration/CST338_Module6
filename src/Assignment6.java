@@ -64,6 +64,14 @@ class GameModel
    private CardGameFramework highCardGame;
    private String computer;
    private String human;
+   private int computerNum = 0;
+   private int humanNum = 1;
+   private Card leftCard;
+   private Card rightCard;
+   private int computerScore = 0;
+   private int humanScore = 0;
+   private boolean computerCantPlay = false;
+   private boolean humanCantPlay = false;
    
    public GameModel()
    {
@@ -78,7 +86,90 @@ class GameModel
       this.computer = computer;
       this.human = human;
    }
+
+   // deal cards
+   public void dealCards()
+   {
+      this.highCardGame.deal();
+   }
    
+   // need to play a card
+   public Card playCard(int player, int card)
+   {
+      return this.highCardGame.playCard(player, card);
+   }
+   
+   // need to take a card to replace cards played
+   public boolean takeCard(int player)
+   {
+      return this.highCardGame.takeCard(player);
+   }
+   
+   // setter and getter for each game play area
+   public Card getLeftCard()
+   {
+      return leftCard;
+   }
+   
+   public Card getRightCard()
+   {
+      return rightCard;
+   }
+   
+   public void setLeftCard(Card card)
+   {
+      leftCard = card;
+   }
+   
+   public void setRightCard(Card card)
+   {
+      rightCard = card;
+   }
+   
+   // setter and getter for each player can't play
+   public boolean getComputerPlay()
+   {
+      return computerCantPlay;
+   }
+   
+   public boolean getHumanPlay()
+   {
+      return humanCantPlay;
+   }
+   
+   public void setComputerPlay(boolean bool)
+   {
+      computerCantPlay = bool;
+   }
+   
+   public void setHumanPlay(boolean bool)
+   {
+      humanCantPlay = bool;
+   }
+   
+   // new center cards when both can't play
+   public void newMiddleCards()
+   {
+      leftCard = this.highCardGame.getCardFromDeck();
+      rightCard = this.highCardGame.getCardFromDeck();
+   }
+   
+   // update can't play
+   public void cantPlay(int player)
+   {
+      if(player == 0)
+      {
+         computerScore++;
+      }
+      else if (player == 1)
+      {
+         humanScore++;
+      }
+      else
+      {
+         System.out.println("Bad player number");
+      }
+   }
 }
 //END class GameModel
 

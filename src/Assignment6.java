@@ -46,75 +46,58 @@ public class Assignment6
 }
 
 //START class ClockTimer
-class ClockTimer
+class ClockTimer extends JFrame implements ActionListener, Runnable
 {
 	int count=0;
-	boolean pauseStatus=false; // would we want this to be true as default?
-	public Timer clock;
-   public JButton timerButton;
+	boolean pauseStatus=false; 
+	public JButton timerButton;
+   public JLabel timerPanel;
 
-   public ClockTimer()
+   public ClockTimer() 
    {
-      // 1000 milliseconds = 1 second timer interval
-      clock = new Timer(1000, timerEvent);
-
-      timerButton = new JButton();
-      timerButton.addActionListener(buttonEvent);
-   }
-   
-   public void startTimer() // toggle timer?  This would work for both right?
-   {
-      this.pauseStatus=!this.pauseStatus;
-   }
-   
-   public int getCount( ) {
-	   return this.count;
-   }
-   
-   // needed for Timer class instantiation, makes timer count
-   // the Timer does this every 1000 milliseconds
-   private ActionListener timerEvent = new ActionListener() 
-   {
-      public void actionPerformed(ActionEvent e) 
-      {
-         while (!pauseStatus)
-            {
-            count++;
-            }
-      }
-   };
-
-   // creates Timer and starts it
-   private ActionListener buttonEvent = new ActionListener() 
-   {
-      public void actionPerformed(ActionEvent e) 
-      {
-         TimerClass gameTimer = new TimerClass();
-         gameTimer.start();
-      }
-   };
-   
-   // for threading
-   private class TimerClass extends Thread 
-   {
-      public void run() 
-      {
-         // called by action listener
-         // swaps pause status
-         startTimer();
-         doNothing();
-      }
+      setSize(200, 200);
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       
-      public void doNothing()
-      {
-         try 
+      timerButton = new JButton("Pause");
+      timerButton.addActionListener(this);
+   }
+   
+   public void startTimer() 
+   {
+      Thread timerThread = new Thread(this);
+      timerThread.start();
+   }
+   
+   public String formatTimer(long seconds) 
+   {
+      long sec = seconds % 60;
+      long min = (seconds / 60) % 60;
+      return String.format("%01d:%02d", min, sec);
+   }
+   
+   public void actionPerformed(ActionEvent e) 
+   {
+      pauseStatus = !pauseStatus;
+   }
+   
+   public void run()
+   {
+      if (!pauseStatus)
          {
-            Thread.sleep(1000);
-         } 
-         catch (InterruptedException e) 
-         {
-            System.out.println(e);
+         count++;
          }
+      timerPanel.setText(formatTimer(count));
+   }
+   
+   public void doNothing()
+   {
+      try 
+      {
+         Thread.sleep(1000);
+      } 
+      catch (InterruptedException e) 
+      {
+         System.out.println(e);
       }
    }
 }

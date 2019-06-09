@@ -181,14 +181,14 @@ class GameModel
    
    public void setTable(JPanel cpu, JPanel player)
    {
-      for (int k = 0; k < 7; k++)
+      for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
       {
          computerLabels[k] = new JLabel(GUICard.getBackCardIcon());
          humanLabels[k] = new JButton(GUICard.getIcon(highCardGame.getHand(1)
                .inspectCard(k)));
       }
     //Add cards aka labels to panels 
-      for (int k = 0; k < 7; k++)
+      for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
       {
          cpu.add(computerLabels[k]);
          player.add(humanLabels[k]);

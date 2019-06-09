@@ -179,7 +179,7 @@ class GameModel
       }
    }
    
-   public void setTable(JPanel cpu, JPanel player)
+   public void setTable(JPanel cpu, JPanel player, JPanel table)
    {
       for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
       {
@@ -193,6 +193,8 @@ class GameModel
          cpu.add(computerLabels[k]);
          player.add(humanLabels[k]);
       }
+      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck())));
+      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck())));
    }
 }
 //END class GameModel
@@ -379,7 +381,7 @@ class GameControl
    public void setGame()
    {
       model.dealCards();
-      model.setTable(view.pnlComputerHand,view.pnlHumanHand);
+      model.setTable(view.pnlComputerHand,view.pnlHumanHand, view.pnlPlayArea);
       view.setVisible();
    }
    

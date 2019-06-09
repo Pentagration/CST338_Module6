@@ -68,8 +68,10 @@ class GameModel
    private int humanNum = 1;
    private Card leftCard;
    private Card rightCard;
-   private int computerCantPlay = 0;
-   private int humanCantPlay = 0;
+   private int computerScore = 0;
+   private int humanScore = 0;
+   private boolean computerCantPlay = false;
+   private boolean humanCantPlay = false;
    
    public GameModel()
    {
@@ -124,16 +126,44 @@ class GameModel
       rightCard = card;
    }
    
+   // setter and getter for each player can't play
+   public boolean getComputerPlay()
+   {
+      return computerCantPlay;
+   }
+   
+   public boolean getHumanPlay()
+   {
+      return humanCantPlay;
+   }
+   
+   public void setComputerPlay(boolean bool)
+   {
+      computerCantPlay = bool;
+   }
+   
+   public void setHumanPlay(boolean bool)
+   {
+      humanCantPlay = bool;
+   }
+   
+   // new center cards when both can't play
+   public void newMiddleCards()
+   {
+      leftCard = this.highCardGame.getCardFromDeck();
+      rightCard = this.highCardGame.getCardFromDeck();
+   }
+   
    // update can't play
    public void cantPlay(int player)
    {
       if(player == 0)
       {
-         computerCantPlay++;
+         computerScore++;
       }
       else if (player == 1)
       {
-         humanCantPlay++;
+         humanScore++;
       }
       else
       {

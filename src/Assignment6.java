@@ -22,7 +22,7 @@ public class Assignment6
    public static void main(String[] args)
    {
       int numPacksPerDeck = 1;
-      int numJokersPerPack = 2;
+      int numJokersPerPack = 4;
       int numUnusedCardsPerPack = 0;
       int numOfPlayers = NUM_PLAYERS;
       int cardsPerHand = NUM_CARDS_PER_HAND;
@@ -86,9 +86,15 @@ class GameModel
 class GameView extends JFrame
 {
    private ClockTimer timer;
+   
+   static final int MAX_CARDS_PER_HAND = 56;
+   static final int NUM_PLAYERS = 2;
+   static final int NUM_CARDS_PER_HAND = 7;
 
+   int k;
+   
    //main GUI panels
-   private JPanel 
+   public JPanel 
    pnlComputerHand,  //computer cards
    pnlHumanHand,     //human/player cards
    pnlPlayArea,      //two piles of cards
@@ -96,14 +102,20 @@ class GameView extends JFrame
    pnlGame;          //game messages, cannot play, and quit
 
    //GUI buttons
-   private JButton
+   public JButton
    timerButton,      //start/stop the timer
    quit,             //quit the game
    cannotPlay;       //when no card can be played
    
    //games messages
-   private JLabel message;
+   public JLabel message;
    public String messageText = "DEFAULT MESSAGE";
+   
+   //Cards
+   static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
+   static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
+   static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS];
+   static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
    
    public GameView(ClockTimer timer)
    {
@@ -123,6 +135,7 @@ class GameView extends JFrame
       pnlPlayArea = new JPanel(new GridLayout(1,2));
       pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
 
+      
       //human area panel
       pnlHumanHand = new JPanel(new GridLayout(1,7));
       pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
@@ -152,6 +165,8 @@ class GameView extends JFrame
       gbc.gridx = 0;
       gbc.gridy = 0;
       pnlGame.add(message, gbc);
+      //THIS WORKS message.setText("Test");
+      message.setText("TEST 4");
       
       quit = new JButton("Quit");
       quit.setPreferredSize(new Dimension(300,50));
@@ -165,8 +180,6 @@ class GameView extends JFrame
       gbc.gridy = 2;
       pnlGame.add(cannotPlay, gbc);
       
-
-
       //add all the major panels to the JFrame
       this.setSize(1200,800);
       this.add(pnlGame, BorderLayout.WEST);
@@ -176,12 +189,9 @@ class GameView extends JFrame
       this.add(pnlHumanHand, BorderLayout.SOUTH);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
+      //THIS WORKS message.setText("TEST2"); 
    }
-
-   public ClockTimer getTimer()
-   {
-      return timer;
-   }
+   
 
    //listeners for quit, cannot play and timer start/stop
    public void quitActionListener(ActionListener l)

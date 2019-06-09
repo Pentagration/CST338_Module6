@@ -39,8 +39,6 @@ public class Assignment6
       GameModel model = new GameModel(highCardGame, "Computer", "Player");
       GameView view = new GameView(timer);
       GameControl game = new GameControl(model, view);
-      
-      view.newMessage("THIS IS THE NEW MESSAGE I WANT");
    }
 }
 
@@ -200,17 +198,14 @@ class GameView extends JFrame
    cannotPlay;       //when no card can be played
    
    //games messages
-   //public JLabel message;
-   //public String messageText = "DEFAULT MESSAGE";
    public JTextArea message;
  
-   /*
    //Cards
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS];
    static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
-   */
+   
    //constructor
    public GameView(ClockTimer timer)
    {
@@ -223,59 +218,67 @@ class GameView extends JFrame
       this.timer = timer;
 
       //computer panel
-      pnlComputerHand = new JPanel(new GridLayout(1,7));
-      pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
+      this.pnlComputerHand = new JPanel(new GridLayout(1,7));
+      this.pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
 
       //play area panel
-      pnlPlayArea = new JPanel(new GridLayout(1,2));
-      pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
-
-      
+      this.pnlPlayArea = new JPanel(new GridLayout(1,2));
+      this.pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
+ 
       //human area panel
-      pnlHumanHand = new JPanel(new GridLayout(1,7));
-      pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
+      this.pnlHumanHand = new JPanel(new GridLayout(1,7));
+      this.pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
 
       //time panel
       GridBagConstraints gbc = new GridBagConstraints();
       
-      pnlTime = new JPanel(new GridBagLayout());
-      pnlTime.setBorder(BorderFactory.createTitledBorder("Time"));
+      this.pnlTime = new JPanel(new GridBagLayout());
+      this.pnlTime.setBorder(BorderFactory.createTitledBorder("Time"));
       
       gbc.gridx = 0;
       gbc.gridy = 0;
-      pnlTime.add(this.timer, gbc);
+      this.pnlTime.add(this.timer, gbc);
       
-      timerButton = new JButton("Start/Stop Timer");
-      timerButton.setPreferredSize(new Dimension(300,50));
+      this.timerButton = new JButton("Start/Stop Timer");
+      this.timerButton.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 1;
-      pnlTime.add(timerButton);
+      this.pnlTime.add(timerButton);
 
       //game panel
-      pnlGame = new JPanel(new GridBagLayout());
-      pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
+      this.pnlGame = new JPanel(new GridBagLayout());
+      this.pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
       
-      JTextArea message = new JTextArea(
-            "This is a really long Default Message that should require multiple lines");
-      message.setEditable(false);
-      message.setLineWrap(true);
-      message.setWrapStyleWord(true);
-      message.setPreferredSize(new Dimension(300,400));
+      this.message = new JTextArea("Welcome to the game High-Card. \n\n(1) Play a "
+            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2) "
+            + "You can play a card from your hand that is one higher or one lower "
+            + "than one of the cards in Playing Area. \n\n(3) If you cannot play, "
+            + "click the Can't Play button. \n\nThe game ends when the deck is "
+            + "out of cards. The player with the fewest number of Can't Play clicks"
+            + " is the winner! \n\n\n" 
+            + "Round = " + "<var1>"
+            + "\nCards Remaining = " + "<var2>"
+            + "\n\nComputer Can't Play count = " + "<var3>"
+            + "\n\nPlayer Can't Play count = " + "<var4>");
+      this.message.setEditable(false);
+      this.message.setLineWrap(true);
+      this.message.setWrapStyleWord(true);
+      this.message.setPreferredSize(new Dimension(300,400));
       gbc.gridx = 0;
       gbc.gridy = 0;
-      pnlGame.add(message, gbc);
+      this.pnlGame.add(message, gbc);
       
-      quit = new JButton("Quit");
-      quit.setPreferredSize(new Dimension(300,50));
+      this.quit = new JButton("Quit");
+      this.quit.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 1;
-      pnlGame.add(quit, gbc);
+      this.pnlGame.add(quit, gbc);
       
-      cannotPlay = new JButton("Can't Play");
-      cannotPlay.setPreferredSize(new Dimension(300,50));
+      this.cannotPlay = new JButton("Can't Play");
+      this.cannotPlay.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 2;
-      pnlGame.add(cannotPlay, gbc);
+      this.pnlGame.add(cannotPlay, gbc);
       
       //add all the major panels to the JFrame
       this.setSize(1200,800);
@@ -287,12 +290,7 @@ class GameView extends JFrame
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
    }
-   
-   public void newMessage(String newMessage)
-   {
-      message.setText(newMessage);
-   }
-   
+      
    //listeners for quit, cannot play and timer start/stop
    public void quitActionListener(ActionListener l)
    {
@@ -311,7 +309,38 @@ class GameView extends JFrame
       timerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
       timerButton.addActionListener(l);
    }
-
+   
+   //update the message
+   public void newMessage (String newMessage)
+   {
+      this.message.setText(newMessage);
+   }
+   
+   public ClockTimer getTimer()
+   {
+      return timer;
+   }
+   
+   private void addComputerHand(Hand hand)
+   {
+      for (int k = 0; k < NUM_CARDS_PER_HAND; k++)
+      {
+         this.pnlComputerHand.add(new JLabel(GUICard.getBackCardIcon()));
+      }
+   }
+   
+   private void addCpuHand(Hand hand, int maxHandSize)
+   {  
+      
+      for(int k = 0; k < maxHandSize; k++)
+      {
+         if(k > hand.getNumCards() - 1)
+            this.pnlComputerHand.add(new JLabel(GUICard.getBackCardIcon()));
+         else
+            this.pnlComputerHand.add(new JLabel(GUICard.getBackCardIcon()));
+      }
+      
+   }
    
 
 }

@@ -12,8 +12,6 @@ import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.*;
 
-import timertest.Example;
-
 import java.util.*;
 import java.text.*;
 

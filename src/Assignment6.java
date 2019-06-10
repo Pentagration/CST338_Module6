@@ -50,17 +50,86 @@ public class Assignment6
 }
 
 //START class ClockTimer
-class ClockTimer extends JLabel
+class ClockTimer extends JPanel implements ActionListener, Runnable
 {
-   public ClockTimer()
-   {
-      
-   }
-   
-   public void startTimer()
-   {
-      
-   }
+ int count=0;
+ boolean pauseStatus=false; 
+ public JButton timerButton;
+ public JLabel timerLabel;
+ public JPanel timerPanel;
+
+ // Here is an example of how I got it to run
+ /*
+ public static void main(String[] args) 
+ {
+    ClockTimer test = new ClockTimer();
+    test.setVisible(true);
+    test.startTimer();
+ }
+ */
+  
+  public ClockTimer()
+  {
+     //setSize(200, 200);
+     //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     
+     setLayout(new BorderLayout());
+     
+     timerPanel = new JPanel();
+     timerPanel.setLayout(new FlowLayout());
+     
+     timerButton = new JButton("Pause");
+     timerButton.addActionListener(this);
+     timerPanel.add(timerButton);
+     add(timerPanel, "South");
+     
+     timerLabel = new JLabel();
+     timerLabel.setText("0");
+     add(timerLabel, "Center");
+  }
+  
+  public void startTimer() 
+  {
+     Thread timerThread = new Thread(this);
+     timerThread.start();
+  }
+  
+  public String formatTimer(long seconds) 
+  {
+     long sec = seconds % 60;
+     long min = (seconds / 60) % 60;
+     return String.format("%02d:%02d", min, sec);
+  }
+  
+  public void actionPerformed(ActionEvent e) 
+  {
+     pauseStatus = !pauseStatus;
+  }
+  
+  public void run()
+  {
+     while (true)
+     {
+        if (!pauseStatus)
+        {
+           count++;
+        }
+     timerLabel.setText(formatTimer(count));
+     doNothing();
+     }
+  }
+  
+  public void doNothing()
+  {
+     try 
+     {
+        Thread.sleep(1000);
+     } 
+     catch (InterruptedException e) 
+     {
+        System.out.println(e);
+     }
+  }
 }
 //END class ClockTimer
 

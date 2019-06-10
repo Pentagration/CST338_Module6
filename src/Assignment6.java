@@ -45,7 +45,6 @@ public class Assignment6
       GameView view = new GameView(timer);
       
       GameControl game = new GameControl(model, view);
-      game.setGame();
    }
 }
 
@@ -260,7 +259,7 @@ class GameModel
 //END class GameModel
 
 //START class GameView
-class GameView extends JFrame implements ActionListener
+class GameView extends JFrame 
 {
    private ClockTimer timer;
    
@@ -282,9 +281,7 @@ class GameView extends JFrame implements ActionListener
    public JButton
    quit,             //quit the game
    cannotPlay;       //when no card can be played
-   
    public boolean cantPlayPress;
-   
    //games messages
    public JTextArea message;
    
@@ -306,7 +303,6 @@ class GameView extends JFrame implements ActionListener
 
       this.timer = timer;
       cantPlayPress = false;
-
       //computer panel
       pnlComputerHand = new JPanel(new GridLayout(1,7));
       pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
@@ -362,14 +358,12 @@ class GameView extends JFrame implements ActionListener
       pnlGame.add(message, gbc);
       
       this.quit = new JButton("Quit");
-      this.quit.addActionListener(this);
       this.quit.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 1;
       this.pnlGame.add(quit, gbc);
       
       this.cannotPlay = new JButton("Can't Play");
-      this.cannotPlay.addActionListener(this);
       this.cannotPlay.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 2;
@@ -391,30 +385,19 @@ class GameView extends JFrame implements ActionListener
       setVisible(true);
    }
    
-   public void actionPerformed(ActionEvent ev)
+ //listeners for quit, cannot play and timer start/stop
+   public void addQuitListener(ActionListener ev)
    {
-      if (ev.getActionCommand().equalsIgnoreCase("Quit"))
-         quitActionListener();
-      else if (ev.getActionCommand().equalsIgnoreCase("Can't Play"))
-         cannotPlayListener();
-   }
-   
-   public boolean getCantPlayPress()
-   {
-      return cantPlayPress;
-   }
-   
-   //listeners for quit, cannot play and timer start/stop
-   public void quitActionListener()
-   {
-      System.exit(0);
+      this.quit.addActionListener(ev);
    }
    
    //will be updated to false when player clicks card in hand
-   public void cannotPlayListener()
+   public void addCannotPlayListener(ActionListener ev)
    {
-      cantPlayPress = true;
+      this.cannotPlay.addActionListener(ev);
    }
+   
+   
    
 /*IMPLEMENTED in ClockTimer
    public void timerButtonListener(ActionListener l)
@@ -443,7 +426,7 @@ class GameView extends JFrame implements ActionListener
 //END class GameView
 
 //START class GameControl
-class GameControl
+class GameControl 
 {
    private GameModel model;
    private GameView view;
@@ -452,12 +435,22 @@ class GameControl
    {
       model = new GameModel();
       view = new GameView(new ClockTimer());
+      model.dealCards();
+      model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
+      view.addQuitListener(new QuitListener());
+      view.addCannotPlayListener(new CantPlayListener());
+      view.setVisible();
    }
    
    public GameControl(GameModel model, GameView view)
    {
       this.model = model;
       this.view = view;
+      model.dealCards();
+      model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
+      view.addQuitListener(new QuitListener());
+      view.addCannotPlayListener(new CantPlayListener());
+      view.setVisible();
    }
    /*
     * If player/computer cannot play, increments the count.
@@ -468,13 +461,6 @@ class GameControl
        model.cantPlay(i);                   
    }
    
-   public void setGame()
-   {
-      model.dealCards();
-      model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
-      view.setVisible();
-   }
-   
    /*
     * returns Card player wants to play.
     * Model can prevent illegal plays.
@@ -482,6 +468,22 @@ class GameControl
    public Card checkCard(int player, int index)
    {
        return highCardGame.getHand(player).inspectCard(index);
+   }
+   
+   class QuitListener implements ActionListener
+   {
+      public void actionPerformed(ActionEvent ev)
+      {
+         System.exit(0);
+      }
+   }
+   
+   class CantPlayListener implements ActionListener
+   {
+      public void actionPerformed(ActionEvent ev)
+      {
+         System.out.println();
+      }
    }
 }
 //END class GameControl

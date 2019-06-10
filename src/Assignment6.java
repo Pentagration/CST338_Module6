@@ -46,7 +46,6 @@ public class Assignment6
       
       GameControl game = new GameControl(model, view);
       game.setGame();
-      
    }
 }
 
@@ -472,7 +471,7 @@ class GameControl
    public void setGame()
    {
       model.dealCards();
-      model.setTable(view.pnlComputerHand,view.pnlHumanHand, view.pnlPlayArea);
+      model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
       view.setVisible();
    }
    

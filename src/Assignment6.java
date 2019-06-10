@@ -56,7 +56,7 @@ public class Assignment6
 }
 
 //START class ClockTimer
-class ClockTimer extends JFrame implements ActionListener, Runnable
+class ClockTimer extends JPanel implements ActionListener, Runnable
 {
    int count=0;
    boolean pauseStatus=false; 
@@ -76,8 +76,8 @@ class ClockTimer extends JFrame implements ActionListener, Runnable
     
     public ClockTimer()
     {
-       setSize(200, 200);
-       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       //setSize(200, 200);
+       //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        
        setLayout(new BorderLayout());
        

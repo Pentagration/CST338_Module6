@@ -126,7 +126,7 @@ class ClockTimer extends JPanel implements ActionListener, Runnable
 //START class GameModel
 class GameModel
 {
-   private CardGameFramework highCardGame;
+   public CardGameFramework highCardGame;
    private String computer;
    private String human;
    private int computerNum = 0;
@@ -139,12 +139,14 @@ class GameModel
    private boolean humanCantPlay = false;
    JLabel[] computerLabels = new JLabel[7];
    JButton[] humanLabels = new JButton[7];
+   public ButtonGroup cardSelected;
    
    public GameModel()
    {
       this.highCardGame = null;
       this.computer = "";
       this.human = "";
+      cardSelected = new ButtonGroup();
    }
    
    public GameModel(CardGameFramework highCardGame, String computer, String human)
@@ -152,6 +154,7 @@ class GameModel
       this.highCardGame = highCardGame;
       this.computer = computer;
       this.human = human;
+      cardSelected = new ButtonGroup();
    }
 
    // deal cards
@@ -164,6 +167,19 @@ class GameModel
    public Card playCard(int player, int card)
    {
       return this.highCardGame.playCard(player, card);
+   }
+   
+   public int getDifference(Card card, Card card2)
+   {
+      int val1 = 0, val2 = 0;
+      for (int i = 0; i < Card.cValue.length; i++)
+      {
+         if (Card.cValue[i] == card.getValue())
+            val1 = i;
+         else if (Card.cValue[i] == card2.getValue())
+            val2 = i;   
+      }
+      return (val1 - val2);
    }
    
    // need to take a card to replace cards played
@@ -252,8 +268,10 @@ class GameModel
          cpu.add(computerLabels[k]);
          player.add(humanLabels[k]);
       }
-      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck()))); //add 2 cards to table
-      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck())));
+      setLeftCard(highCardGame.getCardFromDeck());
+      setRightCard(highCardGame.getCardFromDeck());
+      table.add(new JLabel(GUICard.getIcon(getLeftCard())));
+      table.add(new JLabel(GUICard.getIcon(getRightCard()))); //add 2 cards to table
    }
 }
 //END class GameModel
@@ -501,8 +519,16 @@ class GameControl
       public void actionPerformed(ActionEvent ev)
       {
          System.out.println("Button works");
+         JButton btn = (JButton) ev.getSource();
+         Card temp = model.highCardGame.getHand(1).inspectCard((Integer)btn.getClientProperty("key"));
+         if (model.getDifference(temp, model.getLeftCard()) == 1 ||                         //check if left card is legal
+               model.getDifference(temp, model.getLeftCard()) == -1)
+            System.out.println("legal move");
+         else if (model.getDifference(temp, model.getRightCard()) == 1 ||                    //check if right card is legal
+               model.getDifference(temp, model.getRightCard()) == -1)
+            System.out.println("legal move");
       }
-   }
+   }//  END ButtonListener
 }
 //END class GameControl
 

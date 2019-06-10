@@ -57,33 +57,24 @@ class ClockTimer extends JPanel implements ActionListener, Runnable
  public JButton timerButton;
  public JLabel timerLabel;
  public JPanel timerPanel;
-
- // Here is an example of how I got it to run
- /*
- public static void main(String[] args) 
- {
-    ClockTimer test = new ClockTimer();
-    test.setVisible(true);
-    test.startTimer();
- }
- */
   
   public ClockTimer()
-  {
-     //setSize(200, 200);
-     //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     
+  {  
      setLayout(new BorderLayout());
      
      timerPanel = new JPanel();
      timerPanel.setLayout(new FlowLayout());
      
-     timerButton = new JButton("Pause");
+     timerButton = new JButton("Start/Stop");
+     timerButton.setPreferredSize(new Dimension(300,50));
+     
      timerButton.addActionListener(this);
      timerPanel.add(timerButton);
      add(timerPanel, "South");
      
      timerLabel = new JLabel();
+     timerLabel.setHorizontalAlignment(JLabel.CENTER);
+     timerLabel.setFont(timerLabel.getFont().deriveFont(48.0f));
      timerLabel.setText("0");
      add(timerLabel, "Center");
   }
@@ -339,11 +330,13 @@ class GameView extends JFrame implements ActionListener
       gbc.gridy = 0;
       pnlTime.add(this.timer, gbc);
       
+      /*IMPLEMENTED IN ClockTimer
       timerButton = new JButton("Start/Stop Timer");
       timerButton.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 1;
       pnlTime.add(timerButton);
+      */
 
       //game panel
       pnlGame = new JPanel(new GridBagLayout());
@@ -354,8 +347,6 @@ class GameView extends JFrame implements ActionListener
       gbc.gridx = 0;
       gbc.gridy = 0;
       pnlGame.add(message, gbc);
-      //THIS WORKS message.setText("Test");
-      message.setText("TEST 4");
       
       quit = new JButton("Quit");
       quit.setPreferredSize(new Dimension(300,50));
@@ -380,7 +371,6 @@ class GameView extends JFrame implements ActionListener
       this.add(pnlHumanHand, BorderLayout.SOUTH);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
-      //THIS WORKS message.setText("TEST2"); 
    }
    
    public void setVisible()

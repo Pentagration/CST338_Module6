@@ -68,7 +68,7 @@ class ClockTimer extends JFrame implements ActionListener, Runnable
    /*
    public static void main(String[] args) 
    {
-      Example test = new Example();
+      ClockTimer test = new ClockTimer();
       test.setVisible(true);
       test.startTimer();
    }

@@ -51,7 +51,7 @@ class ClockTimer extends JFrame implements ActionListener, Runnable
 	int count=0;
 	boolean pauseStatus=false; 
 	public JButton timerButton;
-   public JLabel timerPanel;
+   public JPanel timerPanel;
 
    public ClockTimer() 
    {

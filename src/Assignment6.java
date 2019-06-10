@@ -46,6 +46,7 @@ public class Assignment6
       
       GameControl game = new GameControl(model, view);
       game.setGame();
+      
    }
 }
 
@@ -280,15 +281,13 @@ class GameView extends JFrame implements ActionListener
 
    //GUI buttons
    public JButton
-   timerButton,      //start/stop the timer
    quit,             //quit the game
    cannotPlay;       //when no card can be played
    
    public boolean cantPlayPress;
    
    //games messages
-   public JLabel message;
-   public String messageText = "DEFAULT MESSAGE";
+   public JTextArea message;
    
    //Cards
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
@@ -342,25 +341,38 @@ class GameView extends JFrame implements ActionListener
       pnlGame = new JPanel(new GridBagLayout());
       pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
       
-      JLabel message = new JLabel(messageText);
-      message.setPreferredSize(new Dimension(300,400));
+      this.message = new JTextArea("Welcome to the game High-Card. \n\n(1) Play a "
+            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
+            + " You can play a card from your hand that is one higher or one lower"
+            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
+            + " click the Can't Play button. \n\nThe game ends when the deck is "
+            + "out of cards. The player with the fewest number of Can't Play"
+            + " clicks is the winner! \n\n\n" 
+            + "Round = " + "0"
+            + "\n\nCards Remaining = " + "42"
+            + "\n\nComputer Can't Play count = " + "0"
+            + "\n\nPlayer Can't Play count = " + "0");
+      this.message.setEditable(false);
+      this.message.setLineWrap(true);
+      this.message.setWrapStyleWord(true);
+      this.message.setPreferredSize(new Dimension(300,400));
       gbc.gridx = 0;
       gbc.gridy = 0;
       pnlGame.add(message, gbc);
       
-      quit = new JButton("Quit");
-      quit.setPreferredSize(new Dimension(300,50));
-      quit.addActionListener(this);
+      this.quit = new JButton("Quit");
+      //this.quit.setPreferredSize(new Dimension(300,50));
+      this.quit.addActionListener(this);
       gbc.gridx = 0;
       gbc.gridy = 1;
-      pnlGame.add(quit, gbc);
+      this.pnlGame.add(quit, gbc);
       
-      cannotPlay = new JButton("Can't Play");
-      cannotPlay.setPreferredSize(new Dimension(300,50));
-      cannotPlay.addActionListener(this);
+      this.cannotPlay = new JButton("Can't Play");
+      this.cannotPlay.setPreferredSize(new Dimension(300,50));
+      this.cannotPlay.addActionListener(this);
       gbc.gridx = 0;
       gbc.gridy = 2;
-      pnlGame.add(cannotPlay, gbc);
+      this.pnlGame.add(cannotPlay, gbc);
       
       //add all the major panels to the JFrame
       this.setSize(1200,800);
@@ -400,14 +412,29 @@ class GameView extends JFrame implements ActionListener
    {
       cantPlayPress = true;
    }
-
+   
+/*IMPLEMENTED in ClockTimer
    public void timerButtonListener(ActionListener l)
    {
       timerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
       timerButton.addActionListener(l);
    }
-
-
+*/
+   public void updateMessage (int round, int cardsRemaining, int compCannotCount, 
+         int playCannotCount)
+   {
+      this.message.setText("Welcome to the game High-Card. \n\n(1) Play a "
+            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
+            + " You can play a card from your hand that is one higher or one lower"
+            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
+            + " click the Can't Play button. \n\nThe game ends when the deck is "
+            + "out of cards. The player with the fewest number of Can't Play"
+            + " clicks is the winner! \n\n\n" 
+            + "Round = " + round
+            + "\n\nCards Remaining = " + cardsRemaining
+            + "\n\nComputer Can't Play count = " + compCannotCount
+            + "\n\nPlayer Can't Play count = " + playCannotCount);
+   }
 }
 //END class GameView
 

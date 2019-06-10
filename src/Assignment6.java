@@ -397,6 +397,15 @@ class GameView extends JFrame
       this.cannotPlay.addActionListener(ev);
    }
    
+   public void addButtonListener(ActionListener ev)
+   {
+      for (int i = 0; i < pnlHumanHand.getComponentCount(); i++)
+      {
+         ((JButton)pnlHumanHand.getComponent(i)).putClientProperty("key", i);
+         ((JButton)pnlHumanHand.getComponent(i)).addActionListener(ev);
+      }
+   }
+   
    
    
 /*IMPLEMENTED in ClockTimer
@@ -448,6 +457,7 @@ class GameControl
       this.view = view;
       model.dealCards();
       model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
+      view.addButtonListener(new ButtonListener());
       view.addQuitListener(new QuitListener());
       view.addCannotPlayListener(new CantPlayListener());
       view.setVisible();
@@ -483,6 +493,14 @@ class GameControl
       public void actionPerformed(ActionEvent ev)
       {
          System.out.println();
+      }
+   }
+   
+   class ButtonListener implements ActionListener
+   {
+      public void actionPerformed(ActionEvent ev)
+      {
+         System.out.println("Button works");
       }
    }
 }

@@ -289,11 +289,13 @@ class GameView extends JFrame implements ActionListener
    //games messages
    public JTextArea message;
    
+   /* IMPLEMENTED in GameModel
    //Cards
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS];
    static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
+   */
    
    public GameView(ClockTimer timer)
    {

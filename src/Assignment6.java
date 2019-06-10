@@ -361,15 +361,15 @@ class GameView extends JFrame implements ActionListener
       pnlGame.add(message, gbc);
       
       this.quit = new JButton("Quit");
-      //this.quit.setPreferredSize(new Dimension(300,50));
       this.quit.addActionListener(this);
+      this.quit.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 1;
       this.pnlGame.add(quit, gbc);
       
       this.cannotPlay = new JButton("Can't Play");
-      this.cannotPlay.setPreferredSize(new Dimension(300,50));
       this.cannotPlay.addActionListener(this);
+      this.cannotPlay.setPreferredSize(new Dimension(300,50));
       gbc.gridx = 0;
       gbc.gridy = 2;
       this.pnlGame.add(cannotPlay, gbc);
@@ -402,12 +402,14 @@ class GameView extends JFrame implements ActionListener
    {
       return cantPlayPress;
    }
+   
    //listeners for quit, cannot play and timer start/stop
    public void quitActionListener()
    {
       System.exit(0);
    }
-//will be updated to false when player clicks card in hand
+   
+   //will be updated to false when player clicks card in hand
    public void cannotPlayListener()
    {
       cantPlayPress = true;
@@ -420,6 +422,7 @@ class GameView extends JFrame implements ActionListener
       timerButton.addActionListener(l);
    }
 */
+   
    public void updateMessage (int round, int cardsRemaining, int compCannotCount, 
          int playCannotCount)
    {

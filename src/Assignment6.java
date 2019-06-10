@@ -9,8 +9,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.border.*;
+
+import com.sun.media.sound.ModelAbstractChannelMixer;
+
+import jdk.internal.module.IllegalAccessLogger.Mode;
 
 import java.util.*;
 import java.text.*;
@@ -20,8 +23,6 @@ public class Assignment6
    static int MAX_CARDS_PER_HAND = 56;
    static int NUM_PLAYERS = 2;
    static int NUM_CARDS_PER_HAND = 7;
-   
-   static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    
    public static void main(String[] args)
    {
@@ -36,111 +37,109 @@ public class Assignment6
             numPacksPerDeck, numJokersPerPack,  
             numUnusedCardsPerPack, unusedCardsPerPack, 
             numOfPlayers, cardsPerHand);
-      
-      // actionPerformed() ?
+   
       ClockTimer timer = new ClockTimer();
       timer.startTimer();
       
       GameModel model = new GameModel(highCardGame, "Computer", "Player");
       GameView view = new GameView(timer);
+      
       GameControl game = new GameControl(model, view);
-         
-
-      highCardGame.deal();
-      computerLabels[0] = new JLabel(GUICard.getBackCardIcon());
-      view.pnlComputerHand.add(computerLabels[0]);
-      
-      
-      
+      game.setGame();
    }
 }
 
 //START class ClockTimer
 class ClockTimer extends JPanel implements ActionListener, Runnable
 {
-   int count=0;
-   boolean pauseStatus=false; 
-   public JButton timerButton;
-   public JLabel timerLabel;
-   public JPanel timerPanel;
+ int count=0;
+ boolean pauseStatus=false; 
+ public JButton timerButton;
+ public JLabel timerLabel;
+ public JPanel timerPanel;
 
-   // Here is an example of how I got it to run
-   /*
-   public static void main(String[] args) 
-   {
-      ClockTimer test = new ClockTimer();
-      test.setVisible(true);
-      test.startTimer();
-   }
-   */
-    
-    public ClockTimer()
-    {
-       //setSize(200, 200);
-       //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       
-       setLayout(new BorderLayout());
-       
-       timerPanel = new JPanel();
-       timerPanel.setLayout(new FlowLayout());
-       
-       timerButton = new JButton("Pause");
-       timerButton.addActionListener(this);
-       timerPanel.add(timerButton);
-       add(timerPanel, "South");
-       
-       timerLabel = new JLabel();
-       timerLabel.setText("0");
-       add(timerLabel, "Center");
-    }
-    
-    public void startTimer() 
-    {
-       Thread timerThread = new Thread(this);
-       timerThread.start();
-    }
-    
-    public String formatTimer(long seconds) 
-    {
-       long sec = seconds % 60;
-       long min = (seconds / 60) % 60;
-       return String.format("%02d:%02d", min, sec);
-    }
-    
-    public void actionPerformed(ActionEvent e) 
-    {
-       pauseStatus = !pauseStatus;
-    }
-    
-    public void run()
-    {
-       while (true)
-       {
-          if (!pauseStatus)
-          {
-             count++;
-          }
-       timerLabel.setText(formatTimer(count));
-       doNothing();
-       }
-    }
-    
-    public void doNothing()
-    {
-       try 
-       {
-          Thread.sleep(1000);
-       } 
-       catch (InterruptedException e) 
-       {
-          System.out.println(e);
-       }
-    }
+ // Here is an example of how I got it to run
+ /*
+ public static void main(String[] args) 
+ {
+    ClockTimer test = new ClockTimer();
+    test.setVisible(true);
+    test.startTimer();
+ }
+ */
+  
+  public ClockTimer()
+  {
+     //setSize(200, 200);
+     //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     
+     setLayout(new BorderLayout());
+     
+     timerPanel = new JPanel();
+     timerPanel.setLayout(new FlowLayout());
+     
+     timerButton = new JButton();
+     timerButton.addActionListener(this);
+     timerPanel.add(timerButton);
+     add(timerPanel, "South");
+     
+     timerLabel = new JLabel();
+     timerLabel.setText("0");
+     add(timerLabel, "Center");
+  }
+  
+  public void startTimer() 
+  {
+     Thread timerThread = new Thread(this);
+     timerThread.start();
+  }
+  
+  public String formatTimer(long seconds) 
+  {
+     long sec = seconds % 60;
+     long min = (seconds / 60) % 60;
+     return String.format("%02d:%02d", min, sec);
+  }
+  
+  public void actionPerformed(ActionEvent e) 
+  {
+     pauseStatus = !pauseStatus;
+  }
+  
+  public void run()
+  {
+     while (true)
+     {
+        if (!pauseStatus)
+        {
+           count++;
+           timerButton.setText("Stop");
+        }
+        else
+        {
+           timerButton.setText("Start");
+        }
+     timerLabel.setText(formatTimer(count));
+     doNothing();
+     }
+  }
+  
+  public void doNothing()
+  {
+     try 
+     {
+        Thread.sleep(1000);
+     } 
+     catch (InterruptedException e) 
+     {
+        System.out.println(e);
+     }
+  }
 }
 //END class ClockTimer
 
 //START class GameModel
-class GameModel
+class GameModel implements ActionListener
 {
    private CardGameFramework highCardGame;
    private String computer;
@@ -153,6 +152,9 @@ class GameModel
    private int humanScore = 0;
    private boolean computerCantPlay = false;
    private boolean humanCantPlay = false;
+   JLabel[] computerLabels = new JLabel[7];
+   JButton[] humanLabels = new JButton[7];
+   public ButtonGroup cardSelected;
    
    public GameModel()
    {
@@ -251,14 +253,57 @@ class GameModel
          System.out.println("Bad player number");
       }
    }
+   
+   public void setTable(JPanel cpu, JPanel player, JPanel table)
+   {
+      for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
+      {
+         computerLabels[k] = new JLabel(GUICard.getBackCardIcon());
+         humanLabels[k] = new JButton(GUICard.getIcon(highCardGame.getHand(1)
+               .inspectCard(k)));
+         humanLabels[k].addActionListener(this);
+      }
+    //Add cards aka labels to panels 
+      for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
+      {
+         cpu.add(computerLabels[k]);
+         player.add(humanLabels[k]);
+      }
+      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck()))); //add 2 cards to table
+      table.add(new JLabel(GUICard.getIcon(highCardGame.getCardFromDeck())));
+      
+      refreshButtons(player);
+   }
+   
+   public void refreshButtons(JPanel table)
+   {
+      cardSelected = new ButtonGroup();
+      
+      for (int k = 0; k < highCardGame.getHand(1).getNumCards(); k++)
+      {
+         JRadioButton rb = new JRadioButton();
+         if (k == 0) {
+            rb.setSelected(true);
+         }
+         rb.setActionCommand(Integer.toString(k));
+         cardSelected.add(rb);
+         JPanel panel = new JPanel();
+         panel.add(rb);
+         table.add(panel);
+      }
+   }
+
+   @Override
+   public void actionPerformed(ActionEvent e)
+   {
+      
+   }
 }
 //END class GameModel
 
 //START class GameView
-class GameView extends JFrame
+class GameView extends JFrame implements ActionListener
 {
-   private static final long serialVersionUID = 1L;
-
    private ClockTimer timer;
    
    static final int MAX_CARDS_PER_HAND = 56;
@@ -281,16 +326,18 @@ class GameView extends JFrame
    quit,             //quit the game
    cannotPlay;       //when no card can be played
    
+   public boolean cantPlayPress;
+   
    //games messages
-   public JTextArea message;
- 
+   public JLabel message;
+   public String messageText = "DEFAULT MESSAGE";
+   
    //Cards
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
    static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS];
    static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
    
-   //constructor
    public GameView(ClockTimer timer)
    {
       //setup main frame
@@ -300,73 +347,62 @@ class GameView extends JFrame
       setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
       this.timer = timer;
+      cantPlayPress = false;
 
       //computer panel
-      this.pnlComputerHand = new JPanel();
-      this.pnlComputerHand.setBorder
-         (BorderFactory.createTitledBorder("Computer Hand"));
-      this.pnlComputerHand.setLayout(new GridLayout(1, NUM_CARDS_PER_HAND));
+      pnlComputerHand = new JPanel(new GridLayout(1,7));
+      pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
 
       //play area panel
-      this.pnlPlayArea = new JPanel();
-      this.pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
-      this.pnlPlayArea.setLayout(new GridLayout(1,2));
- 
+      pnlPlayArea = new JPanel(new GridLayout(1,2));
+      pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
+
+      
       //human area panel
-      this.pnlHumanHand = new JPanel();
-      this.pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
-      this.pnlHumanHand.setLayout(new GridLayout(1, NUM_CARDS_PER_HAND));
+      pnlHumanHand = new JPanel(new GridLayout(2,7));
+      pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
 
       //time panel
       GridBagConstraints gbc = new GridBagConstraints();
       
-      this.pnlTime = new JPanel(new GridBagLayout());
-      this.pnlTime.setBorder(BorderFactory.createTitledBorder("Time"));
+      pnlTime = new JPanel(new GridBagLayout());
+      pnlTime.setBorder(BorderFactory.createTitledBorder("Time"));
       
       gbc.gridx = 0;
       gbc.gridy = 0;
-      this.pnlTime.add(this.timer, gbc);
+      pnlTime.add(this.timer, gbc);
       
-      this.timerButton = new JButton("Start/Stop Timer");
-      this.timerButton.setPreferredSize(new Dimension(300,50));
-      gbc.gridx = 0;
-      gbc.gridy = 1;
-      this.pnlTime.add(timerButton);
+//      timerButton = new JButton("Start/Stop Timer");
+//      timerButton.setPreferredSize(new Dimension(300,50));
+//      gbc.gridx = 0;
+//      gbc.gridy = 1;
+//      pnlTime.add(timerButton);
 
       //game panel
-      this.pnlGame = new JPanel(new GridBagLayout());
-      this.pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
+      pnlGame = new JPanel(new GridBagLayout());
+      pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
       
-      this.message = new JTextArea("Welcome to the game High-Card. \n\n(1) Play a "
-            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
-            + " You can play a card from your hand that is one higher or one lower"
-            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
-            + " click the Can't Play button. \n\nThe game ends when the deck is "
-            + "out of cards. The player with the fewest number of Can't Play"
-            + " clicks is the winner! \n\n\n" 
-            + "Round = " + "0"
-            + "\n\nCards Remaining = " + "var2"
-            + "\n\nComputer Can't Play count = " + "0"
-            + "\n\nPlayer Can't Play count = " + "0");
-      this.message.setEditable(false);
-      this.message.setLineWrap(true);
-      this.message.setWrapStyleWord(true);
-      this.message.setPreferredSize(new Dimension(300,400));
+      JLabel message = new JLabel(messageText);
+      message.setPreferredSize(new Dimension(300,400));
       gbc.gridx = 0;
       gbc.gridy = 0;
-      this.pnlGame.add(message, gbc);
+      pnlGame.add(message, gbc);
+      //THIS WORKS message.setText("Test");
+      message.setText("TEST 4");
       
-      this.quit = new JButton("Quit");
-      this.quit.setPreferredSize(new Dimension(300,50));
+      quit = new JButton("Quit");
+      quit.setPreferredSize(new Dimension(300,50));
+      quit.addActionListener(this);
       gbc.gridx = 0;
       gbc.gridy = 1;
-      this.pnlGame.add(quit, gbc);
+      pnlGame.add(quit, gbc);
       
-      this.cannotPlay = new JButton("Can't Play");
-      this.cannotPlay.setPreferredSize(new Dimension(300,50));
+      cannotPlay = new JButton("Can't Play");
+      cannotPlay.setPreferredSize(new Dimension(300,50));
+      cannotPlay.addActionListener(this);
       gbc.gridx = 0;
       gbc.gridy = 2;
-      this.pnlGame.add(cannotPlay, gbc);
+      pnlGame.add(cannotPlay, gbc);
       
       //add all the major panels to the JFrame
       this.setSize(1200,800);
@@ -377,19 +413,35 @@ class GameView extends JFrame
       this.add(pnlHumanHand, BorderLayout.SOUTH);
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setVisible(true);
+      //THIS WORKS message.setText("TEST2"); 
    }
-      
+   
+   public void setVisible()
+   {
+      setVisible(true);
+   }
+   
+   public void actionPerformed(ActionEvent ev)
+   {
+      if (ev.getActionCommand().equalsIgnoreCase("Quit"))
+         quitActionListener();
+      else if (ev.getActionCommand().equalsIgnoreCase("Can't Play"))
+         cannotPlayListener();
+   }
+   
+   public boolean getCantPlayPress()
+   {
+      return cantPlayPress;
+   }
    //listeners for quit, cannot play and timer start/stop
-   public void quitActionListener(ActionListener l)
+   public void quitActionListener()
    {
-      quit.setCursor(new Cursor(Cursor.HAND_CURSOR));
-      quit.addActionListener(l);
+      System.exit(0);
    }
-
-   public void cannotPlayListener(ActionListener l)
+//will be updated to false when player clicks card in hand
+   public void cannotPlayListener()
    {
-      cannotPlay.setCursor(new Cursor(Cursor.HAND_CURSOR));
-      cannotPlay.addActionListener(l);
+      cantPlayPress = true;
    }
 
    public void timerButtonListener(ActionListener l)
@@ -397,33 +449,8 @@ class GameView extends JFrame
       timerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
       timerButton.addActionListener(l);
    }
-   
-   //update the message
-   public void newMessage (String newMessage)
-   {
-      this.message.setText(newMessage);
-   }
-   
-   public void updateMessage (int round, int cardsRemaining, int compCannotCount, 
-         int playCannotCount)
-   {
-      this.message.setText("Welcome to the game High-Card. \n\n(1) Play a "
-            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
-            + " You can play a card from your hand that is one higher or one lower"
-            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
-            + " click the Can't Play button. \n\nThe game ends when the deck is "
-            + "out of cards. The player with the fewest number of Can't Play"
-            + " clicks is the winner! \n\n\n" 
-            + "Round = " + round
-            + "\n\nCards Remaining = " + cardsRemaining
-            + "\n\nComputer Can't Play count = " + compCannotCount
-            + "\n\nPlayer Can't Play count = " + playCannotCount);
-   }
-   
-   public ClockTimer getTimer()
-   {
-      return timer;
-   }
+
+
 }
 //END class GameView
 
@@ -436,7 +463,7 @@ class GameControl
    public GameControl()
    {
       model = new GameModel();
-      view = new GameView();
+      view = new GameView(new ClockTimer());
    }
    
    public GameControl(GameModel model, GameView view)
@@ -446,19 +473,27 @@ class GameControl
    }
    /*
     * If player/computer cannot play, increments the count.
+    * calls models cantPlay() method.
    */
-   public void setCannotPlayCount()
+   public void setCannotPlayCount(int i)
    {
-	   if (view.getResponse() == true)
-		   model.incrCannotPlay();
+       model.cantPlay(i);                   
    }
+   
+   public void setGame()
+   {
+      model.dealCards();
+      model.setTable(view.pnlComputerHand,view.pnlHumanHand, view.pnlPlayArea);
+      view.setVisible();
+   }
+   
    /*
     * returns Card player wants to play.
     * Model can prevent illegal plays.
     * */
    public Card checkCard(int player, int index)
    {
-	   return highCardGame.getHand(player).inspectCard(index);
+       return model.highCardGame.getHand(player).inspectCard(index);
    }
 }
 //END class GameControl

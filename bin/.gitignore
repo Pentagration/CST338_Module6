@@ -1,7 +1,14 @@
+/Assignment6.class
+/Card$Suit.class
+/Card.class
+/CardGameFramework.class
 /ClockTimer.class
+/Deck.class
+/GUICard.class
 /GameControl.class
 /GameModel.class
 /GameView.class
+<<<<<<< HEAD
 /GUICard.class
 /GameControl$Card$Suit.class
 /GameControl$Card.class
@@ -14,3 +21,9 @@
 /CardGameFramework.class
 /Deck.class
 /Hand.class
+=======
+/Hand.class
+/ClockTimer$1.class
+/ClockTimer$2.class
+/ClockTimer$TimerClass.class
+>>>>>>> timer

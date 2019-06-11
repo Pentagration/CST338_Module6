@@ -257,7 +257,7 @@ class GameModel
    public void setTable(JPanel cpu, JPanel player, JPanel table)
    {
       // create panels and add to table
-      for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
+      for (int k = 0; k < highCardGame.getHand(1).getNumCards(); k++)
       {
          humanLabels[k] = new JLabel(GUICard.getIcon(highCardGame.getHand(1)
                .inspectCard(k)));
@@ -269,15 +269,21 @@ class GameModel
          cpu.add(computerLabels[i]);
       }
 
-      setLeftCard(highCardGame.getCardFromDeck());
-      setRightCard(highCardGame.getCardFromDeck());
+      if (getLeftCard() == null)
+         {
+         setLeftCard(highCardGame.getCardFromDeck());
+         }
+      if (getRightCard() == null)
+         {
+         setRightCard(highCardGame.getCardFromDeck());
+         }
       table.add(new JButton(GUICard.getIcon(getLeftCard())));
       table.add(new JButton(GUICard.getIcon(getRightCard()))); //add 2 cards to table
       
-      setRadioButtons(player);
+      refreshButtons(player);
    }
    
-   public void setRadioButtons(JPanel player)
+   public void refreshButtons(JPanel player)
    {
       cardSelected = new ButtonGroup();
 
@@ -513,39 +519,7 @@ class GameControl
    {
        return highCardGame.getHand(player).inspectCard(index);
    }
-   
-   public void refreshButtons()
-   {
-      view.pnlPlayArea.removeAll();
-      view.pnlPlayArea.add(new JButton(GUICard.getIcon(model.getLeftCard())));
-      view.pnlPlayArea.add(new JButton(GUICard.getIcon(model.getRightCard())));
       
-      view.pnlHumanHand.removeAll();
-      view.pnlComputerHand.removeAll();
-      
-      for (int i = 0; i < model.highCardGame.getHand(0).getNumCards(); i++) 
-      {
-         JLabel label = new JLabel(GUICard.getBackCardIcon());
-         view.pnlComputerHand.add(label);
-      }
-      
-      for (int j = 0; j < model.highCardGame.getHand(1).getNumCards(); j++) 
-      {
-         JLabel label = new JLabel(GUICard.getIcon(model.highCardGame.getHand(1).inspectCard(j)));
-         view.pnlHumanHand.add(label);
-      }
-      
-      model.cardSelected = new ButtonGroup();
-
-      for (int k = 0; k < model.highCardGame.getHand(1).getNumCards(); k++)
-      {
-         JRadioButton rb = new JRadioButton();
-         rb.setActionCommand(Integer.toString(k));
-         model.cardSelected.add(rb);
-         view.pnlHumanHand.add(rb);
-      }
-   }
-   
    class QuitListener implements ActionListener
    {
       public void actionPerformed(ActionEvent ev)
@@ -574,26 +548,33 @@ class GameControl
          //System.out.println(btn.getClientProperty("key"));
          Card temp = model.highCardGame.getHand(1).inspectCard(cardIndex);
          if ((Integer) btn.getClientProperty("key") == 0)
+         {
+            if (model.getDifference(temp, model.getLeftCard()) == 1)
             {
-               if (model.getDifference(temp, model.getLeftCard()) == 1)
-               {
-                  System.out.println("legal move left");
-                  model.setLeftCard(temp);
-                  model.highCardGame.getHand(1).playCard(cardIndex);
-               }
+               model.setLeftCard(temp);
+               model.highCardGame.getHand(1).playCard(cardIndex);
+               //view.pnlPlayArea.remove(0);
+               //view.pnlHumanHand.remove(cardIndex);
             }
-            
+         }
          else if ((Integer) btn.getClientProperty("key") == 1)
          {
             if (model.getDifference(temp, model.getRightCard()) == 1)
             {
-               System.out.println("legal move right");
                model.setRightCard(temp);
                model.highCardGame.getHand(1).playCard(cardIndex);
+               //view.pnlPlayArea.remove(1);
+               //view.pnlHumanHand.remove(cardIndex);
             }
          }
          
-         refreshButtons();
+         view.pnlPlayArea.removeAll();
+         view.pnlHumanHand.removeAll();
+         view.pnlComputerHand.removeAll();
+         
+         model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
+         
+         view.addButtonListener(new ButtonListener());
       }
    }//  END ButtonListener
 }

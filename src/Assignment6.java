@@ -138,7 +138,7 @@ class GameModel
    private boolean computerCantPlay = false;
    private boolean humanCantPlay = false;
    JLabel[] computerLabels = new JLabel[7];
-   JButton[] humanLabels = new JButton[7];
+   JLabel[] humanLabels = new JLabel[7];
    public ButtonGroup cardSelected;
    
    public GameModel()
@@ -259,7 +259,7 @@ class GameModel
       for (int k = 0; k < GameView.NUM_CARDS_PER_HAND; k++)
       {
          computerLabels[k] = new JLabel(GUICard.getBackCardIcon());
-         humanLabels[k] = new JButton(GUICard.getIcon(highCardGame.getHand(1)
+         humanLabels[k] = new JLabel(GUICard.getIcon(highCardGame.getHand(1)
                .inspectCard(k)));
       }
     //Add cards aka labels to panels 
@@ -270,8 +270,25 @@ class GameModel
       }
       setLeftCard(highCardGame.getCardFromDeck());
       setRightCard(highCardGame.getCardFromDeck());
-      table.add(new JLabel(GUICard.getIcon(getLeftCard())));
-      table.add(new JLabel(GUICard.getIcon(getRightCard()))); //add 2 cards to table
+      table.add(new JButton(GUICard.getIcon(getLeftCard())));
+      table.add(new JButton(GUICard.getIcon(getRightCard()))); //add 2 cards to table
+      
+      refreshButtons(player);
+   }
+   
+   public void refreshButtons(JPanel table)
+   {
+      cardSelected = new ButtonGroup();
+
+      for (int k = 0; k < highCardGame.getHand(1).getNumCards(); k++)
+      {
+         JRadioButton rb = new JRadioButton();
+         rb.setActionCommand(Integer.toString(k));
+         cardSelected.add(rb);
+         JPanel panel = new JPanel();
+         //panel.add(rb);
+         table.add(rb);
+      }
    }
 }
 //END class GameModel
@@ -331,7 +348,7 @@ class GameView extends JFrame
 
       
       //human area panel
-      pnlHumanHand = new JPanel(new GridLayout(1,7));
+      pnlHumanHand = new JPanel(new GridLayout(2,7));
       pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
 
       //time panel
@@ -417,10 +434,10 @@ class GameView extends JFrame
    
    public void addButtonListener(ActionListener ev)
    {
-      for (int i = 0; i < pnlHumanHand.getComponentCount(); i++)
+      for (int i = 0; i < pnlPlayArea.getComponentCount(); i++)
       {
-         ((JButton)pnlHumanHand.getComponent(i)).putClientProperty("key", i);
-         ((JButton)pnlHumanHand.getComponent(i)).addActionListener(ev);
+         ((JButton)pnlPlayArea.getComponent(i)).putClientProperty("key", i);
+         ((JButton)pnlPlayArea.getComponent(i)).addActionListener(ev);
       }
    }
    

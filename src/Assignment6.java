@@ -458,10 +458,12 @@ class GameView extends JFrame
       this.message.setEditable(false);
       this.message.setLineWrap(true);
       this.message.setWrapStyleWord(true);
-      this.message.setPreferredSize(new Dimension(300,400));
+      JScrollPane scrollV = new JScrollPane (message, 
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+      scrollV.setPreferredSize(new Dimension(300,400));
       gbc.gridx = 0;
       gbc.gridy = 0;
-      pnlGame.add(message, gbc);
+      pnlGame.add(scrollV,gbc);
       
       this.quit = new JButton("Quit");
       this.quit.setPreferredSize(new Dimension(200,50));

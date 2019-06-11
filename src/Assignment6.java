@@ -558,15 +558,6 @@ class GameControl
    {
        model.cantPlay(i);                   
    }
-   
-   /*
-    * returns Card player wants to play.
-    * Model can prevent illegal plays.
-    * */
-   public Card checkCard(int player, int index)
-   {
-       return highCardGame.getHand(player).inspectCard(index);
-   }
       
    class QuitListener implements ActionListener
    {

@@ -256,14 +256,16 @@ class GameModel
    
    public void setTable(JPanel cpu, JPanel player, JPanel table)
    {
+      // draw cards if needed
       if (highCardGame.getHand(1).getNumCards() < GameView.NUM_CARDS_PER_HAND)
       {
-         highCardGame.getHand(1).takeCard(highCardGame.getCardFromDeck());
+         takeCard(1);
       }
       
       if (highCardGame.getHand(0).getNumCards() < GameView.NUM_CARDS_PER_HAND)
       {
-         highCardGame.getHand(0).takeCard(highCardGame.getCardFromDeck());
+         //highCardGame.getHand(0).takeCard(highCardGame.getCardFromDeck());
+         takeCard(0);
       }
       
       // create panels and add to table
@@ -555,16 +557,13 @@ class GameControl
          
          JButton btn = (JButton) ev.getSource();
          
-         //System.out.println(btn.getClientProperty("key"));
          Card temp = model.highCardGame.getHand(1).inspectCard(cardIndex);
          if ((Integer) btn.getClientProperty("key") == 0)
          {
             if (model.getDifference(temp, model.getLeftCard()) == 1)
             {
                model.setLeftCard(temp);
-               model.highCardGame.getHand(1).playCard(cardIndex);
-               //view.pnlPlayArea.remove(0);
-               //view.pnlHumanHand.remove(cardIndex);
+               model.playCard(1, cardIndex);
             }
          }
          else if ((Integer) btn.getClientProperty("key") == 1)
@@ -572,9 +571,7 @@ class GameControl
             if (model.getDifference(temp, model.getRightCard()) == 1)
             {
                model.setRightCard(temp);
-               model.highCardGame.getHand(1).playCard(cardIndex);
-               //view.pnlPlayArea.remove(1);
-               //view.pnlHumanHand.remove(cardIndex);
+               model.playCard(1, cardIndex);
             }
          }
          

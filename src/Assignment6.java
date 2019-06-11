@@ -588,12 +588,13 @@ class GameControl
       {
          model.cantPlay(1);
          model.setHumanPlay(true);
+         model.computerPlay();
          view.pnlPlayArea.removeAll();
          view.pnlHumanHand.removeAll();
          view.pnlComputerHand.removeAll();
-         model.computerPlay();
          model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
          view.addMessage(model.humanScore,model.computerScore);
+         view.addButtonListener(new ButtonListener());
       }
    }
    

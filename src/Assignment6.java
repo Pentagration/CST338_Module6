@@ -35,13 +35,6 @@ public class Assignment6
       int cardsPerHand = NUM_CARDS_PER_HAND;
       Card[] unusedCardsPerPack = null;
       
-      int round = 0;
-      int cardsRemaining = (NUM_CARDS_PER_PACK * numPacksPerDeck) + 
-            numJokersPerPack - numUnusedCardsPerPack - (NUM_PLAYERS * NUM_CARDS_PER_HAND);
-      System.out.println(cardsRemaining);
-      int compCannotCount = 0;
-      int playCannotCount = 0;
-      
       CardGameFramework highCardGame = new CardGameFramework( 
             numPacksPerDeck, numJokersPerPack,  
             numUnusedCardsPerPack, unusedCardsPerPack, 

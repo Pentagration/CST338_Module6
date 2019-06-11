@@ -337,6 +337,32 @@ class GameModel
       }
    }
    
+   public void computerPlay(GameView view) 
+   {
+      computerCantPlay = true;
+      for (int i = 0; i < highCardGame.getHand(0).getNumCards(); i++) 
+      {
+         if (getDifference(getLeftCard(), highCardGame.getHand(0).inspectCard(i)) == 1)
+         {
+            computerCantPlay = false;
+            setLeftCard(highCardGame.getHand(0).inspectCard(i));
+            playCard(0, i);
+         } 
+         else if (getDifference(getRightCard(), highCardGame.getHand(0).inspectCard(i)) == 1)
+         {
+            computerCantPlay = false;
+            setRightCard(highCardGame.getHand(0).inspectCard(i));
+            playCard(0, i);
+         }
+      }
+      if (computerCantPlay) 
+      {
+         cantPlay(0);
+         setComputerPlay(true);
+         view.addMessage(humanScore,computerScore);
+      }
+   }
+   
    public void turns(JPanel cpu, JPanel player, JPanel table) 
    {
       // if both can't play
@@ -616,7 +642,7 @@ class GameControl
          view.pnlPlayArea.removeAll();
          view.pnlHumanHand.removeAll();
          view.pnlComputerHand.removeAll();
-         model.computerPlay();
+         model.computerPlay(view);
          model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
          
          view.addButtonListener(new ButtonListener());

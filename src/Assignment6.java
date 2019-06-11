@@ -304,6 +304,7 @@ class GameModel
       for (int k = 0; k < highCardGame.getHand(1).getNumCards(); k++)
       {
          JRadioButton rb = new JRadioButton();
+         rb.setHorizontalAlignment(JRadioButton.CENTER);
          rb.setActionCommand(Integer.toString(k));
          cardSelected.add(rb);
          player.add(rb);

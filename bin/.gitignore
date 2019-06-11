@@ -14,3 +14,6 @@
 /CardGameFramework.class
 /Deck.class
 /Hand.class
+/GameControl$ButtonListener.class
+/GameControl$CantPlayListener.class
+/GameControl$QuitListener.class

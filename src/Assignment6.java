@@ -535,12 +535,28 @@ class GameControl
    {
       public void actionPerformed(ActionEvent ev)
       {
+         int cardIndex;
+         cardIndex = Integer.parseInt(model.cardSelected.getSelection().getActionCommand());
+         
          JButton btn = (JButton) ev.getSource();
-         Card temp = model.highCardGame.getHand(1).inspectCard((Integer)btn.getClientProperty("key"));
-         if (model.getDifference(temp, model.getLeftCard()) == 1 )
-            System.out.println("legal move");
-         else if (model.getDifference(temp, model.getRightCard()) == 1)
-            System.out.println("legal move");
+         
+         //System.out.println(btn.getClientProperty("key"));
+         Card temp = model.highCardGame.getHand(1).inspectCard(cardIndex);
+         if ((Integer) btn.getClientProperty("key") == 0)
+            {
+               if (model.getDifference(temp, model.getLeftCard()) == 1)
+               {
+                  System.out.println("legal move left");
+               }
+            }
+            
+         else if ((Integer) btn.getClientProperty("key") == 1)
+         {
+            if (model.getDifference(temp, model.getRightCard()) == 1)
+            {
+               System.out.println("legal move right");
+            }
+         }
       }
    }//  END ButtonListener
 }

@@ -333,10 +333,11 @@ class GameModel
       if (computerCantPlay) 
       {
          cantPlay(0);
+         setComputerPlay(true);
       }
    }
    
-   public void turns() 
+   public void turns(JPanel cpu, JPanel player, JPanel table) 
    {
       // if both can't play
       if (humanCantPlay && computerCantPlay) 
@@ -355,13 +356,6 @@ class GameModel
             endGame();
          }
       } 
-      // if only player can't play
-      else if (humanCantPlay) 
-      {
-         // computer plays and player gets another chance
-         computerPlay();
-         humanCantPlay = false;
-      }
    }
    
    public void endGame()
@@ -589,6 +583,7 @@ class GameControl
          model.cantPlay(1);
          model.setHumanPlay(true);
          model.computerPlay();
+         model.turns(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
          view.pnlPlayArea.removeAll();
          view.pnlHumanHand.removeAll();
          view.pnlComputerHand.removeAll();

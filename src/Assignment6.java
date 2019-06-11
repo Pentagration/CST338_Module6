@@ -409,17 +409,11 @@ class GameView extends JFrame
    public JButton
    quit,             //quit the game
    cannotPlay;       //when no card can be played
+   
    public boolean cantPlayPress;
+   
    //games messages
    public JTextArea message;
-   
-   /* IMPLEMENTED in GameModel
-   //Cards
-   static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
-   static JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];
-   static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS];
-   static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
-   */
    
    public GameView(ClockTimer timer)
    {
@@ -453,30 +447,18 @@ class GameView extends JFrame
       gbc.gridx = 0;
       gbc.gridy = 0;
       pnlTime.add(this.timer, gbc);
-      
-      /*IMPLEMENTED IN ClockTimer
-      timerButton = new JButton("Start/Stop Timer");
-      timerButton.setPreferredSize(new Dimension(300,50));
-      gbc.gridx = 0;
-      gbc.gridy = 1;
-      pnlTime.add(timerButton);
-      */
 
       //game panel
       pnlGame = new JPanel(new GridBagLayout());
       pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
       
       this.message = new JTextArea("Welcome to the game High-Card. \n\n(1) Play a "
-            + "card from Your Hand onto one of the cards the Playing Area. \n(2)"
+            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
             + " You can play a card from your hand that is one higher or one lower"
-            + " than one of the cards in Playing Area. \n(3) If you cannot play,"
+            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
             + " click the Can't Play button. \n\nThe game ends when the deck is "
             + "out of cards. The player with the fewest number of Can't Play"
-            + " clicks is the winner! \n\n" 
-            + "Round = " + "0"
-            + "\n\nCards Remaining = " + "40"
-            + "\n\nComputer Can't Play count = " + "0"
-            + "\n\nPlayer Can't Play count = " + "0");
+            + " clicks is the winner! \n\n");
       this.message.setEditable(false);
       this.message.setLineWrap(true);
       this.message.setWrapStyleWord(true);
@@ -513,7 +495,7 @@ class GameView extends JFrame
       setVisible(true);
    }
    
- //listeners for quit, cannot play and timer start/stop
+   //listeners for quit, cannot play and timer start/stop
    public void addQuitListener(ActionListener ev)
    {
       this.quit.addActionListener(ev);
@@ -533,36 +515,8 @@ class GameView extends JFrame
          ((JButton)pnlPlayArea.getComponent(i)).addActionListener(ev);
       }
    }
-   
-   
-   
-/*IMPLEMENTED in ClockTimer
-   public void timerButtonListener(ActionListener l)
-   {
-      timerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-      timerButton.addActionListener(l);
-   }
-*/
-
-   public void updateMessage (int round, int cardsRemaining, int compCannotCount, 
-         int playCannotCount)
-   {
-      this.message.setText("Welcome to the game High-Card. \n\n(1) Play a "
-            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
-            + " You can play a card from your hand that is one higher or one lower"
-            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
-            + " click the Can't Play button. \n\nThe game ends when the deck is "
-            + "out of cards. The player with the fewest number of Can't Play"
-            + " clicks is the winner! \n\n\n" 
-            + "Round = " + round
-            + "\n\nCards Remaining = " + cardsRemaining
-            + "\n\nComputer Can't Play count = " + compCannotCount
-            + "\n\nPlayer Can't Play count = " + playCannotCount);
-      
-   }
 }
 //END class GameView
-
 
 //START class GameControl
 class GameControl 

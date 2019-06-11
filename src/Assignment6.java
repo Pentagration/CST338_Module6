@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.JOptionPane;
 
 import com.sun.media.sound.ModelAbstractChannelMixer;
 
@@ -307,6 +308,79 @@ class GameModel
          player.add(rb);
       }
    }
+   
+   public void computerPlay() 
+   {
+      for (int i = 0; i < highCardGame.getHand(0).getNumCards(); i++) 
+      {
+         if (getDifference(getLeftCard(), highCardGame.getHand(0).inspectCard(i)) == 1)
+         {
+            computerCantPlay = false;
+            setLeftCard(highCardGame.getHand(0).inspectCard(i));
+            playCard(0, i);
+         } 
+         else if (getDifference(getRightCard(), highCardGame.getHand(0).inspectCard(i)) == 1)
+         {
+            computerCantPlay = false;
+            setRightCard(highCardGame.getHand(0).inspectCard(i));
+            playCard(0, i);
+         }
+      }
+      if (computerCantPlay) 
+      {
+         cantPlay(0);
+      }
+   }
+   
+   public void turns() 
+   {
+      // if both can't play
+      if (humanCantPlay && computerCantPlay) 
+      {
+         // check cards remaining in deck
+         if (highCardGame.getNumCardsRemainingInDeck() > 1) 
+         {
+            humanCantPlay = false;
+            computerCantPlay = false;
+            newMiddleCards();
+         } 
+         else 
+         {
+            // end game condition if cards run out of deck
+            // cards would run out during deal if only 1 left
+            endGame();
+         }
+      } 
+      // if only player can't play
+      else if (humanCantPlay) 
+      {
+         // computer plays and player gets another chance
+         computerPlay();
+         humanCantPlay = false;
+      }
+   }
+   
+   public void endGame()
+   {
+      String message = "";
+      
+      if (computerScore > humanScore)
+      {
+         message = "You Win!";
+      }
+      else if (humanScore > computerScore)
+      {
+         message = "Computer Wins!";
+      }
+      else
+      {
+         message = "Can you believe it, it's a tie!";
+      }
+      
+      JOptionPane.showMessageDialog(null,
+            message, "Game Over",
+            JOptionPane.INFORMATION_MESSAGE);
+   }
 }
 //END class GameModel
 
@@ -544,7 +618,9 @@ class GameControl
    {
       public void actionPerformed(ActionEvent ev)
       {
-         System.out.println();
+         model.cantPlay(1);
+         model.setHumanPlay(true);
+         model.computerPlay();
       }
    }
    
@@ -578,7 +654,7 @@ class GameControl
          view.pnlPlayArea.removeAll();
          view.pnlHumanHand.removeAll();
          view.pnlComputerHand.removeAll();
-         
+         model.computerPlay();
          model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
          
          view.addButtonListener(new ButtonListener());

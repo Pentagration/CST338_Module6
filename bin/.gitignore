@@ -27,3 +27,6 @@
 /ClockTimer$2.class
 /ClockTimer$TimerClass.class
 >>>>>>> timer
+/GameControl$ButtonListener.class
+/GameControl$CantPlayListener.class
+/GameControl$QuitListener.class

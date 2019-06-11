@@ -135,12 +135,12 @@ class GameModel
    private int humanNum = 1;
    private Card leftCard;
    private Card rightCard;
-   private int computerScore = 0;
-   private int humanScore = 0;
+   public int computerScore = 0;
+   public int humanScore = 0;
    private boolean computerCantPlay = false;
    private boolean humanCantPlay = false;
-   JLabel[] computerLabels = new JLabel[7];
-   JLabel[] humanLabels = new JLabel[7];
+   JLabel[] computerLabels = new JLabel[GameView.NUM_CARDS_PER_HAND];
+   JLabel[] humanLabels = new JLabel[GameView.NUM_CARDS_PER_HAND];
    public ButtonGroup cardSelected;
    
    public GameModel()
@@ -314,6 +314,7 @@ class GameModel
    
    public void computerPlay() 
    {
+	  computerCantPlay = true;
       for (int i = 0; i < highCardGame.getHand(0).getNumCards(); i++) 
       {
          if (getDifference(getLeftCard(), highCardGame.getHand(0).inspectCard(i)) == 1)
@@ -491,6 +492,14 @@ class GameView extends JFrame
       this.setVisible(true);
    }
    
+   public void addMessage(int playerCount, int cpuCount)
+   {
+	   message.append("player passes:" + playerCount);
+	   message.append("\n");
+	   message.append("cpu passes:" + cpuCount);
+	   message.append("\n");
+   }
+   
    public void setVisible()
    {
       setVisible(true);
@@ -579,7 +588,12 @@ class GameControl
       {
          model.cantPlay(1);
          model.setHumanPlay(true);
+         view.pnlPlayArea.removeAll();
+         view.pnlHumanHand.removeAll();
+         view.pnlComputerHand.removeAll();
          model.computerPlay();
+         model.setTable(view.pnlComputerHand, view.pnlHumanHand, view.pnlPlayArea);
+         view.addMessage(model.humanScore,model.computerScore);
       }
    }
    

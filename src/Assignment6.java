@@ -21,7 +21,7 @@ import java.text.*;
 
 public class Assignment6
 {
-   static int NUM_CARDS_PER_PACK = 56;
+   static int NUM_CARDS_PER_PACK = 52;    //standard pack without jokers
    static int MAX_CARDS_PER_HAND = 56;
    static int NUM_PLAYERS = 2;
    static int NUM_CARDS_PER_HAND = 7;
@@ -171,6 +171,7 @@ class GameModel
       return this.highCardGame.playCard(player, card);
    }
    
+   //check if the card is playable +/- 1
    public int getDifference(Card card, Card card2)
    {
       int val1 = 0, val2 = 0;

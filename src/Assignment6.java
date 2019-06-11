@@ -21,18 +21,26 @@ import java.text.*;
 
 public class Assignment6
 {
+   static int NUM_CARDS_PER_PACK = 56;
    static int MAX_CARDS_PER_HAND = 56;
    static int NUM_PLAYERS = 2;
    static int NUM_CARDS_PER_HAND = 7;
    
    public static void main(String[] args)
-   {
+   {  
       int numPacksPerDeck = 1;
       int numJokersPerPack = 4;
       int numUnusedCardsPerPack = 0;
       int numOfPlayers = NUM_PLAYERS;
       int cardsPerHand = NUM_CARDS_PER_HAND;
       Card[] unusedCardsPerPack = null;
+      
+      int round = 0;
+      int cardsRemaining = (NUM_CARDS_PER_PACK * numPacksPerDeck) + 
+            numJokersPerPack - numUnusedCardsPerPack - (NUM_PLAYERS * NUM_CARDS_PER_HAND);
+      System.out.println(cardsRemaining);
+      int compCannotCount = 0;
+      int playCannotCount = 0;
       
       CardGameFramework highCardGame = new CardGameFramework( 
             numPacksPerDeck, numJokersPerPack,  
@@ -66,7 +74,7 @@ class ClockTimer extends JPanel implements ActionListener, Runnable
      timerPanel.setLayout(new FlowLayout());
      
      timerButton = new JButton("Start/Stop");
-     timerButton.setPreferredSize(new Dimension(300,50));
+     timerButton.setPreferredSize(new Dimension(200,50));
      
      timerButton.addActionListener(this);
      timerPanel.add(timerButton);
@@ -74,7 +82,7 @@ class ClockTimer extends JPanel implements ActionListener, Runnable
      
      timerLabel = new JLabel();
      timerLabel.setHorizontalAlignment(JLabel.CENTER);
-     timerLabel.setFont(timerLabel.getFont().deriveFont(48.0f));
+     timerLabel.setFont(timerLabel.getFont().deriveFont(24.0f));
      timerLabel.setText("0");
      add(timerLabel, "Center");
   }
@@ -465,14 +473,14 @@ class GameView extends JFrame
       pnlGame.setBorder(BorderFactory.createTitledBorder("Game Panel"));
       
       this.message = new JTextArea("Welcome to the game High-Card. \n\n(1) Play a "
-            + "card from Your Hand onto one of the cards the Playing Area. \n\n(2)"
+            + "card from Your Hand onto one of the cards the Playing Area. \n(2)"
             + " You can play a card from your hand that is one higher or one lower"
-            + " than one of the cards in Playing Area. \n\n(3) If you cannot play,"
+            + " than one of the cards in Playing Area. \n(3) If you cannot play,"
             + " click the Can't Play button. \n\nThe game ends when the deck is "
             + "out of cards. The player with the fewest number of Can't Play"
-            + " clicks is the winner! \n\n\n" 
+            + " clicks is the winner! \n\n" 
             + "Round = " + "0"
-            + "\n\nCards Remaining = " + "42"
+            + "\n\nCards Remaining = " + "40"
             + "\n\nComputer Can't Play count = " + "0"
             + "\n\nPlayer Can't Play count = " + "0");
       this.message.setEditable(false);
@@ -484,16 +492,16 @@ class GameView extends JFrame
       pnlGame.add(message, gbc);
       
       this.quit = new JButton("Quit");
-      this.quit.setPreferredSize(new Dimension(300,50));
+      this.quit.setPreferredSize(new Dimension(200,50));
       gbc.gridx = 0;
       gbc.gridy = 1;
-      this.pnlGame.add(quit, gbc);
+      this.pnlTime.add(quit, gbc);
       
       this.cannotPlay = new JButton("Can't Play");
-      this.cannotPlay.setPreferredSize(new Dimension(300,50));
+      this.cannotPlay.setPreferredSize(new Dimension(200,50));
       gbc.gridx = 0;
       gbc.gridy = 2;
-      this.pnlGame.add(cannotPlay, gbc);
+      this.pnlTime.add(cannotPlay, gbc);
       
       //add all the major panels to the JFrame
       this.setSize(1200,800);
@@ -541,7 +549,7 @@ class GameView extends JFrame
       timerButton.addActionListener(l);
    }
 */
-   
+
    public void updateMessage (int round, int cardsRemaining, int compCannotCount, 
          int playCannotCount)
    {
@@ -556,9 +564,11 @@ class GameView extends JFrame
             + "\n\nCards Remaining = " + cardsRemaining
             + "\n\nComputer Can't Play count = " + compCannotCount
             + "\n\nPlayer Can't Play count = " + playCannotCount);
+      
    }
 }
 //END class GameView
+
 
 //START class GameControl
 class GameControl 

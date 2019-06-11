@@ -179,7 +179,7 @@ class GameModel
          else if (Card.cValue[i] == card2.getValue())
             val2 = i;   
       }
-      return (val1 - val2);
+      return Math.abs(val1 - val2);
    }
    
    // need to take a card to replace cards played
@@ -518,14 +518,11 @@ class GameControl
    {
       public void actionPerformed(ActionEvent ev)
       {
-         System.out.println("Button works");
          JButton btn = (JButton) ev.getSource();
          Card temp = model.highCardGame.getHand(1).inspectCard((Integer)btn.getClientProperty("key"));
-         if (model.getDifference(temp, model.getLeftCard()) == 1 ||                         //check if left card is legal
-               model.getDifference(temp, model.getLeftCard()) == -1)
+         if (model.getDifference(temp, model.getLeftCard()) == 1 )
             System.out.println("legal move");
-         else if (model.getDifference(temp, model.getRightCard()) == 1 ||                    //check if right card is legal
-               model.getDifference(temp, model.getRightCard()) == -1)
+         else if (model.getDifference(temp, model.getRightCard()) == 1)
             System.out.println("legal move");
       }
    }//  END ButtonListener

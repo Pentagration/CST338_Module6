@@ -256,6 +256,16 @@ class GameModel
    
    public void setTable(JPanel cpu, JPanel player, JPanel table)
    {
+      if (highCardGame.getHand(1).getNumCards() < GameView.NUM_CARDS_PER_HAND)
+      {
+         highCardGame.getHand(1).takeCard(highCardGame.getCardFromDeck());
+      }
+      
+      if (highCardGame.getHand(0).getNumCards() < GameView.NUM_CARDS_PER_HAND)
+      {
+         highCardGame.getHand(0).takeCard(highCardGame.getCardFromDeck());
+      }
+      
       // create panels and add to table
       for (int k = 0; k < highCardGame.getHand(1).getNumCards(); k++)
       {
